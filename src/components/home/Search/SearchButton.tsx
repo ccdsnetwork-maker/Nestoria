@@ -1,7 +1,8 @@
 export default function SearchButton() {
   return (
     <button
-      className="w-full rounded-lg bg-[#0B2E6B] px-6 py-3 font-bold text-white transition hover:opacity-90"
+      type="button"
+      className="w-full rounded-xl bg-[#0B2E6B] px-6 py-3 font-bold text-white shadow-lg transition duration-300 hover:-translate-y-0.5 hover:opacity-95"
     >
       Search Properties
     </button>
