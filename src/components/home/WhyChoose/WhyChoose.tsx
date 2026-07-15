@@ -34,12 +34,10 @@ export default function WhyChoose() {
   ];
 
   return (
-    <section className="bg-gray-200 py-20">
+    <section className="bg-[#FFF700] py-20">
       <div className="mx-auto max-w-7xl px-6">
-
         <div className="mb-14 text-center">
-
-          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[var(--accent)]">
+          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[var(--primary)]">
             WHY CHOOSE NESTORIA
           </p>
 
@@ -51,11 +49,9 @@ export default function WhyChoose() {
             We combine technology, transparency and exceptional customer
             service to make buying, renting and requesting properties simple.
           </p>
-
         </div>
 
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-
           {reasons.map((reason) => {
             const Icon = reason.icon;
 
@@ -64,15 +60,12 @@ export default function WhyChoose() {
                 key={reason.title}
                 className="rounded-2xl bg-white p-8 shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
               >
-
                 <div className="mb-6 inline-flex rounded-full bg-[var(--primary)] p-4">
-
                   <Icon
                     size={34}
                     strokeWidth={2}
                     className="text-[var(--accent)]"
                   />
-
                 </div>
 
                 <h3 className="mb-3 text-xl font-bold text-[var(--heading)]">
@@ -82,13 +75,10 @@ export default function WhyChoose() {
                 <p className="text-[var(--text-muted)]">
                   {reason.description}
                 </p>
-
               </div>
             );
           })}
-
         </div>
-
       </div>
     </section>
   );
