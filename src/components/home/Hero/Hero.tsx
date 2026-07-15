@@ -11,12 +11,11 @@ export default function Hero() {
         <HeroContent />
       </div>
 
-      <div className="absolute bottom-0 left-1/2 z-20 w-full max-w-6xl -translate-x-1/2 translate-y-1/2 px-4 md:px-6">
+      <div className="relative z-20 mx-auto -mt-16 w-full max-w-6xl px-4 md:-mt-20 md:px-6">
         <SearchBar />
       </div>
 
-      {/* Space reserved for the floating search bar */}
-      <div className="h-[320px] md:h-[240px]" />
+      <div className="h-20 md:h-24" />
     </section>
   );
 }
