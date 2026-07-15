@@ -38,14 +38,14 @@ export default function PropertyCard({
         <div className="absolute left-3 top-3 flex gap-2">
 
           {property.featured && (
-            <span className="flex items-center gap-1 rounded-full bg-[var(--accent)] px-3 py-1 text-xs font-semibold text-white">
+            <span className="flex items-center gap-1 rounded-full bg-[#FFF700] px-3 py-1 text-xs font-bold text-[#0B2E6B] shadow">
               <Star size={14} fill="currentColor" />
               Featured
             </span>
           )}
 
           {property.verified && (
-            <span className="flex items-center gap-1 rounded-full bg-[var(--secondary)] px-3 py-1 text-xs font-semibold text-white">
+            <span className="flex items-center gap-1 rounded-full bg-green-600 px-3 py-1 text-xs font-bold text-white shadow">
               <BadgeCheck size={14} />
               Verified
             </span>
@@ -57,7 +57,7 @@ export default function PropertyCard({
 
       <div className="space-y-3 p-4">
 
-        <h2 className="text-2xl font-bold text-[var(--primary)]">
+        <h2 className="text-2xl font-bold text-[#0B2E6B]">
           {property.price}
         </h2>
 
@@ -65,12 +65,12 @@ export default function PropertyCard({
           {property.title}
         </h3>
 
-        <div className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
+        <div className="flex items-center gap-2 text-sm text-gray-500">
           <MapPin size={16} />
           {property.location}
         </div>
 
-        <div className="grid grid-cols-4 gap-2 text-xs text-[var(--text-muted)]">
+        <div className="grid grid-cols-4 gap-2 text-xs text-gray-500">
 
           <div className="flex items-center gap-1">
             <Bed size={14} />
@@ -108,7 +108,7 @@ export default function PropertyCard({
         </div>
 
         <p className="text-sm">
-          <span className="font-semibold text-[var(--primary)]">
+          <span className="font-semibold text-[#0B2E6B]">
             Agent:
           </span>{" "}
           {property.agent}
@@ -118,27 +118,27 @@ export default function PropertyCard({
 
           <Link
             href={`/properties/${property.id}`}
-            className="flex-1 rounded-lg bg-[var(--primary)] py-2 text-center text-sm font-semibold text-white transition hover:bg-[var(--primary-dark)]"
+            className="flex-1 rounded-lg bg-[#0B2E6B] py-2 text-center text-sm font-semibold text-white transition hover:opacity-90"
           >
-            View Details
+            View Property
           </Link>
 
           <button
-            className="rounded-lg border border-[var(--border)] p-2 transition hover:bg-gray-100"
+            className="rounded-lg border border-gray-300 p-2 transition hover:bg-gray-100"
             aria-label="Save Property"
           >
             <Heart size={18} />
           </button>
 
           <button
-            className="rounded-lg bg-[var(--secondary)] p-2 text-white transition hover:bg-[var(--secondary-dark)]"
+            className="rounded-lg bg-green-600 p-2 text-white transition hover:opacity-90"
             aria-label="Call Agent"
           >
             <Phone size={18} />
           </button>
 
           <button
-            className="rounded-lg bg-[var(--accent)] p-2 text-white transition hover:bg-[var(--accent-dark)]"
+            className="rounded-lg bg-[#FFF700] p-2 text-[#0B2E6B] transition hover:opacity-90"
             aria-label="WhatsApp Agent"
           >
             <MessageCircle size={18} />

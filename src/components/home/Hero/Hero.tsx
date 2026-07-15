@@ -4,22 +4,16 @@ import SearchBar from "../Search/SearchBar";
 
 export default function Hero() {
   return (
-    <section className="relative min-h-[600px] md:min-h-[750px] w-full overflow-hidden">
-
+    <section className="relative w-full overflow-visible min-h-[980px] md:min-h-[780px]">
       <HeroBackground image="/images/home/hero.jpg" />
 
-      <div className="relative z-10 flex min-h-[600px] md:min-h-[750px] items-center justify-center px-6">
-
+      <div className="relative z-10 flex min-h-[650px] md:min-h-[780px] items-center justify-center px-6">
         <HeroContent />
-
       </div>
 
-      <div className="absolute bottom-0 left-1/2 z-20 w-full max-w-6xl -translate-x-1/2 translate-y-1/2 px-6">
-
+      <div className="absolute left-1/2 bottom-0 z-20 w-full max-w-6xl -translate-x-1/2 translate-y-1/2 px-4 md:px-6">
         <SearchBar />
-
       </div>
-
     </section>
   );
 }
