@@ -1,47 +1,96 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import BackButton from "@/components/layout/BackButton";
 
-const actions = [
+
+const sections = [
   {
+    id: "properties",
     title: "My Properties",
     icon: "🏠",
-    description: "Manage properties you have listed on Nestoria.",
-    link: "/properties/list",
   },
   {
+    id: "requests",
     title: "My Requests",
     icon: "🔍",
-    description: "Track properties you requested from Nestoria.",
-    link: "/properties/request",
   },
   {
+    id: "interiors",
     title: "Interior Projects",
     icon: "🛋",
-    description: "View your interior quotations and projects.",
-    link: "/interiors/projects",
   },
   {
+    id: "saved",
     title: "Saved Properties",
     icon: "❤️",
-    description: "Access properties saved for later.",
-    link: "/properties",
   },
   {
+    id: "messages",
     title: "Messages",
     icon: "💬",
-    description: "Chat with agents and Nestoria support.",
-    link: "/messages",
   },
   {
+    id: "settings",
     title: "Settings",
     icon: "⚙️",
-    description: "Manage your account preferences.",
-    link: "/profile",
   },
 ];
 
 
+const properties = [
+  {
+    name: "Modern 4 Bedroom Duplex",
+    location: "Ibadan",
+    status: "Approved",
+    views: 245,
+  },
+];
+
+
+const requests = [
+  {
+    name: "3 Bedroom Apartment",
+    location: "Lagos",
+    budget: "₦5m/year",
+    status: "Searching",
+  },
+];
+
+
+const interiors = [
+  {
+    name: "Living Room Renovation",
+    type: "Residential",
+    status: "Quote Sent",
+  },
+];
+
+
+const saved = [
+  {
+    name: "Executive Duplex",
+    location: "Abuja",
+    price: "₦75,000,000",
+  },
+];
+
+
+const messages = [
+  {
+    sender: "Nestoria Support",
+    message: "Welcome to Nestoria",
+    date: "Today",
+  },
+];
+
+
+
 export default function Dashboard() {
+
+  const [active, setActive] = useState("properties");
+
 
   return (
 
@@ -49,7 +98,9 @@ export default function Dashboard() {
 
       <div className="mx-auto max-w-6xl px-4 md:px-6">
 
+
         <BackButton />
+
 
         <section className="mt-6 rounded-2xl bg-[#0B2E6B] p-8 text-white shadow-md">
 
@@ -64,13 +115,16 @@ export default function Dashboard() {
         </section>
 
 
+
         <section className="mt-8 rounded-2xl bg-white p-6 shadow-md">
 
-          <div className="flex flex-col gap-5 md:flex-row md:items-center">
+          <div className="flex flex-col gap-6 md:flex-row md:items-center">
 
-            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gray-200 text-5xl">
+
+            <div className="flex h-28 w-28 items-center justify-center rounded-full bg-gray-200 text-5xl">
               👤
             </div>
+
 
             <div>
 
@@ -78,15 +132,22 @@ export default function Dashboard() {
                 User Name
               </h2>
 
-              <p className="text-gray-600">
+              <p className="mt-1 text-gray-600">
                 user@email.com
+              </p>
+
+              <p className="text-gray-600">
+                08000000000
               </p>
 
               <p className="text-gray-600">
                 Lagos, Nigeria
               </p>
 
+
             </div>
+
+
 
             <Link
               href="/profile"
@@ -95,93 +156,372 @@ export default function Dashboard() {
               Edit Profile
             </Link>
 
+
           </div>
+
 
         </section>
 
 
-        <section className="mt-8 grid gap-5 md:grid-cols-4">
 
-          <div className="rounded-xl bg-white p-5 shadow-md">
-            <p className="text-3xl">✅</p>
-            <h3 className="mt-3 font-bold text-[#0B2E6B]">
-              Account
-            </h3>
-            <p className="text-gray-600">
-              Verified
-            </p>
-          </div>
+        <section className="mt-8 rounded-2xl bg-white p-6 shadow-md">
 
-
-          <div className="rounded-xl bg-white p-5 shadow-md">
-            <p className="text-3xl">🏠</p>
-            <h3 className="mt-3 font-bold text-[#0B2E6B]">
-              Properties
-            </h3>
-            <p className="text-gray-600">
-              0 Listed
-            </p>
-          </div>
-
-
-          <div className="rounded-xl bg-white p-5 shadow-md">
-            <p className="text-3xl">🛋</p>
-            <h3 className="mt-3 font-bold text-[#0B2E6B]">
-              Interiors
-            </h3>
-            <p className="text-gray-600">
-              0 Projects
-            </p>
-          </div>
-
-
-          <div className="rounded-xl bg-white p-5 shadow-md">
-            <p className="text-3xl">💬</p>
-            <h3 className="mt-3 font-bold text-[#0B2E6B]">
-              Messages
-            </h3>
-            <p className="text-gray-600">
-              0 New
-            </p>
-          </div>
-
-        </section>
-
-
-        <section className="mt-10">
-
-          <h2 className="text-3xl font-bold text-[#0B2E6B]">
-            Dashboard Actions
+          <h2 className="text-2xl font-bold text-[#0B2E6B]">
+            Dashboard Menu
           </h2>
 
 
-          <div className="mt-6 grid gap-6 md:grid-cols-3">
+          <div className="mt-5 grid gap-4 md:grid-cols-3">
 
-            {actions.map((item) => (
 
-              <Link
-                key={item.title}
-                href={item.link}
-                className="rounded-2xl bg-white p-6 shadow-md transition hover:shadow-lg"
+            {sections.map((section) => (
+
+              <button
+                key={section.id}
+                onClick={() => setActive(section.id)}
+                className={`rounded-xl p-5 text-left shadow-md ${
+                  active === section.id
+                    ? "bg-[#0B2E6B] text-white"
+                    : "bg-gray-100"
+                }`}
               >
 
-                <div className="text-4xl">
-                  {item.icon}
+                <div className="text-3xl">
+                  {section.icon}
                 </div>
 
-                <h3 className="mt-4 text-xl font-bold text-[#0B2E6B]">
-                  {item.title}
+                <h3 className="mt-3 font-bold">
+                  {section.title}
                 </h3>
 
-                <p className="mt-3 text-gray-600">
-                  {item.description}
-                </p>
-
-              </Link>
+              </button>
 
             ))}
 
+
           </div>
+
+        </section>
+        <section className="mt-8 rounded-2xl bg-white p-6 shadow-md">
+
+
+          {active === "properties" && (
+
+            <div>
+
+              <h2 className="text-2xl font-bold text-[#0B2E6B]">
+                🏠 My Properties
+              </h2>
+
+              <div className="mt-5 overflow-x-auto">
+
+                <table className="w-full text-left">
+
+                  <thead>
+
+                    <tr className="border-b">
+
+                      <th className="p-3">
+                        Property
+                      </th>
+
+                      <th className="p-3">
+                        Location
+                      </th>
+
+                      <th className="p-3">
+                        Status
+                      </th>
+
+                      <th className="p-3">
+                        Views
+                      </th>
+
+                    </tr>
+
+                  </thead>
+
+
+                  <tbody>
+
+                    {properties.map((item) => (
+
+                      <tr key={item.name} className="border-b">
+
+                        <td className="p-3">
+                          {item.name}
+                        </td>
+
+                        <td className="p-3">
+                          {item.location}
+                        </td>
+
+                        <td className="p-3">
+                          {item.status}
+                        </td>
+
+                        <td className="p-3">
+                          {item.views}
+                        </td>
+
+                      </tr>
+
+                    ))}
+
+                  </tbody>
+
+                </table>
+
+              </div>
+
+
+              <div className="mt-4 flex justify-center gap-3 text-sm">
+                <button className="rounded border px-4 py-2">
+                  Previous
+                </button>
+
+                <button className="rounded bg-[#0B2E6B] px-4 py-2 text-white">
+                  1
+                </button>
+
+                <button className="rounded border px-4 py-2">
+                  Next
+                </button>
+              </div>
+
+            </div>
+
+          )}
+
+
+
+
+
+          {active === "requests" && (
+
+            <div>
+
+              <h2 className="text-2xl font-bold text-[#0B2E6B]">
+                🔍 My Requests
+              </h2>
+
+
+              {requests.map((item) => (
+
+                <div
+                  key={item.name}
+                  className="mt-5 rounded-lg border p-4"
+                >
+
+                  <p className="font-bold">
+                    {item.name}
+                  </p>
+
+                  <p>
+                    📍 {item.location}
+                  </p>
+
+                  <p>
+                    Budget: {item.budget}
+                  </p>
+
+                  <p>
+                    Status: {item.status}
+                  </p>
+
+                </div>
+
+              ))}
+
+            </div>
+
+          )}
+
+
+
+
+
+          {active === "interiors" && (
+
+            <div>
+
+              <h2 className="text-2xl font-bold text-[#0B2E6B]">
+                🛋 Interior Projects
+              </h2>
+
+
+              {interiors.map((item) => (
+
+                <div
+                  key={item.name}
+                  className="mt-5 rounded-lg border p-4"
+                >
+
+                  <p className="font-bold">
+                    {item.name}
+                  </p>
+
+                  <p>
+                    Type: {item.type}
+                  </p>
+
+                  <p>
+                    Status: {item.status}
+                  </p>
+
+                </div>
+
+              ))}
+
+            </div>
+
+          )}
+
+
+
+
+
+          {active === "saved" && (
+
+            <div>
+
+              <h2 className="text-2xl font-bold text-[#0B2E6B]">
+                ❤️ Saved Properties
+              </h2>
+
+
+              {saved.map((item) => (
+
+                <div
+                  key={item.name}
+                  className="mt-5 rounded-lg border p-4"
+                >
+
+                  <p className="font-bold">
+                    {item.name}
+                  </p>
+
+                  <p>
+                    📍 {item.location}
+                  </p>
+
+                  <p>
+                    {item.price}
+                  </p>
+
+                </div>
+
+              ))}
+
+            </div>
+
+          )}
+
+
+
+
+
+          {active === "messages" && (
+
+            <div>
+
+              <h2 className="text-2xl font-bold text-[#0B2E6B]">
+                💬 Messages
+              </h2>
+
+
+              {messages.map((item) => (
+
+                <div
+                  key={item.sender}
+                  className="mt-5 rounded-lg border p-4"
+                >
+
+                  <p className="font-bold">
+                    {item.sender}
+                  </p>
+
+                  <p>
+                    {item.message}
+                  </p>
+
+                  <p className="text-sm text-gray-500">
+                    {item.date}
+                  </p>
+
+                </div>
+
+              ))}
+
+            </div>
+
+          )}
+          {active === "settings" && (
+
+            <div>
+
+              <h2 className="text-2xl font-bold text-[#0B2E6B]">
+                ⚙️ Account Settings
+              </h2>
+
+
+              <div className="mt-5 space-y-4">
+
+
+                <Link
+                  href="/change-password"
+                  className="block rounded-lg border p-4"
+                >
+                  🔐 Change Password
+                </Link>
+
+
+                <button className="w-full rounded-lg border p-4 text-left">
+                  🔔 Notification Preferences
+                </button>
+
+
+                <button className="w-full rounded-lg border p-4 text-left">
+                  🔒 Privacy Settings
+                </button>
+
+
+                <button className="w-full rounded-lg border p-4 text-left text-red-600">
+                  🗑 Delete Account
+                </button>
+
+
+              </div>
+
+
+              <div className="mt-8 rounded-xl border p-5">
+
+                <h3 className="font-bold text-[#0B2E6B]">
+                  Profile Settings
+                </h3>
+
+
+                <p className="mt-2 text-gray-600">
+                  Update your personal information, profile picture,
+                  phone number and location from your profile page.
+                </p>
+
+
+                <Link
+                  href="/profile"
+                  className="mt-4 inline-block rounded-lg bg-[#0B2E6B] px-5 py-2 font-bold text-white"
+                >
+                  Open Profile Settings
+                </Link>
+
+
+              </div>
+
+
+            </div>
+
+          )}
+
 
         </section>
 
