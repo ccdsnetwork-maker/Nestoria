@@ -1,66 +1,133 @@
+import {
+  Mail,
+  Phone,
+  MessageCircle,
+  Camera,
+  MapPin,
+} from "lucide-react";
+
+import Link from "next/link";
+
 export default function Footer() {
   return (
-    <footer className="mt-16 bg-[#0B2E6B] py-10 text-white">
-      <div className="mx-auto max-w-7xl px-6">
+    <footer className="mt-10 bg-[#0B2E6B] py-8 text-white md:mt-16 md:py-12">
+      <div className="mx-auto max-w-7xl px-4 md:px-6">
 
-        <h2 className="text-2xl font-bold">
-          Nestoria Interiors & Properties
-        </h2>
+        <div className="grid gap-8 md:grid-cols-2 md:gap-10">
 
-        <p className="mt-3 max-w-xl text-sm text-gray-200">
-          Building trust in real estate and transforming spaces with
-          professional interior design solutions.
-        </p>
+          {/* Contact Information */}
+          <div>
 
-        <div className="mt-6 space-y-3 text-sm">
+            <h2 className="text-xl font-bold md:text-2xl">
+              Nestoria Interiors & Properties
+            </h2>
 
-          <p>
-            📧{" "}
-            <a
-              href="mailto:nestoriainteriorsandproperties@gmail.com"
-              className="hover:text-[#C7F000]"
-            >
-              nestoriainteriorsandproperties@gmail.com
-            </a>
-          </p>
+            <p className="mt-2 max-w-md text-sm text-gray-200 md:mt-3">
+              Building trust in real estate and transforming spaces with
+              professional interior design solutions.
+            </p>
 
-          <p>
-            📞{" "}
-            <a
-              href="tel:08029651803"
-              className="hover:text-[#C7F000]"
-            >
-              08029651803
-            </a>
-          </p>
 
-          <p>
-            💬 WhatsApp:{" "}
-            <a
-              href="https://wa.me/2348168049408"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-[#C7F000]"
-            >
-              08168049408
-            </a>
-          </p>
+            <div className="mt-5 space-y-3 text-sm md:mt-6 md:space-y-4">
 
-          <p>
-            📷 Instagram:{" "}
-            <a
-              href="https://instagram.com/nestoria_properties_"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-[#C7F000]"
-            >
-              @nestoria_properties_
-            </a>
-          </p>
+              <p className="flex items-center gap-3">
+                <Mail size={18} />
+                <span>
+                  nestoriainteriorsandproperties@gmail.com
+                </span>
+              </p>
+
+
+              <p className="flex items-center gap-3">
+                <Phone size={18} />
+                <span>
+                  08029651803
+                </span>
+              </p>
+
+
+              <p className="flex items-center gap-3">
+                <MessageCircle size={18} />
+                <span>
+                  08168049408
+                </span>
+              </p>
+
+
+              <p className="flex items-center gap-3">
+                <Camera size={18} />
+                <span>
+                  @nestoria_properties_
+                </span>
+              </p>
+
+
+              <p className="flex items-start gap-3">
+                <MapPin size={18} />
+                <span>
+                  Ondo | Ogun | Oyo | Abuja (Branch Office)
+                  <br />
+                  Lagos (Head Office)
+                </span>
+              </p>
+
+            </div>
+
+          </div>
+
+
+          {/* Links */}
+          <div className="mt-2 md:mt-[120px]">
+
+            <div className="space-y-3 text-sm md:space-y-4">
+
+              <Link
+                href="/about"
+                className="block hover:text-[#FFF700]"
+              >
+                About Us
+              </Link>
+
+
+              <Link
+                href="/properties"
+                className="block hover:text-[#FFF700]"
+              >
+                Properties
+              </Link>
+
+
+              <Link
+                href="/interiors"
+                className="block hover:text-[#FFF700]"
+              >
+                Interiors
+              </Link>
+
+
+              <Link
+                href="/careers"
+                className="block hover:text-[#FFF700]"
+              >
+                Careers
+              </Link>
+
+
+              <Link
+                href="/contact"
+                className="block hover:text-[#FFF700]"
+              >
+                Contact Us
+              </Link>
+
+            </div>
+
+          </div>
 
         </div>
 
-        <div className="mt-8 border-t border-white/20 pt-5 text-xs text-gray-300">
+
+        <div className="mt-8 border-t border-white/20 pt-4 text-xs text-gray-300 md:mt-10 md:pt-5">
           © {new Date().getFullYear()} Nestoria Interiors & Properties.
           All rights reserved.
         </div>

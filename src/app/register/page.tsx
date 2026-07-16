@@ -2,14 +2,21 @@
 
 import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+
 import auth from "@/lib/auth";
+import BackButton from "@/components/layout/BackButton";
+
 
 export default function Register() {
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+
   async function register() {
+
     try {
+
       await createUserWithEmailAndPassword(
         auth,
         email,
@@ -17,36 +24,65 @@ export default function Register() {
       );
 
       alert("Account created successfully");
+
     } catch (error: any) {
+
       alert(error.message);
+
     }
+
   }
 
+
   return (
-    <main className="min-h-screen p-8">
-      <h1 className="text-3xl font-bold">
-        Create Nestoria Account
-      </h1>
 
-      <input
-        className="border p-3 block mt-6 w-full"
-        placeholder="Email"
-        onChange={(e) => setEmail(e.target.value)}
-      />
+    <main className="min-h-screen bg-gray-100 py-10 md:py-20">
 
-      <input
-        className="border p-3 block mt-4 w-full"
-        placeholder="Password"
-        type="password"
-        onChange={(e) => setPassword(e.target.value)}
-      />
 
-      <button
-        className="mt-6 bg-green-700 text-white px-6 py-3 rounded"
-        onClick={register}
-      >
-        Register
-      </button>
+      <div className="mx-auto max-w-md px-4 md:px-6">
+
+
+        <BackButton />
+
+
+        <div className="rounded-xl bg-white p-6 shadow-md md:rounded-2xl md:p-8">
+
+
+          <h1 className="text-3xl font-extrabold text-[#0B2E6B]">
+            Create Nestoria Account
+          </h1>
+
+
+          <input
+            className="mt-6 w-full rounded-lg border p-3 text-sm outline-none"
+            placeholder="Email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+
+          <input
+            className="mt-4 w-full rounded-lg border p-3 text-sm outline-none"
+            placeholder="Password"
+            type="password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+
+          <button
+            className="mt-6 w-full rounded-lg bg-[#FFF700] py-3 font-bold text-[#0B2E6B]"
+            onClick={register}
+          >
+            Register
+          </button>
+
+
+        </div>
+
+
+      </div>
+
+
     </main>
+
   );
 }

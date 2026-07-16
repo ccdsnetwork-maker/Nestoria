@@ -3,32 +3,28 @@ import Link from "next/link";
 
 export default function InteriorShowcase() {
   return (
-    <section className="bg-white py-20">
-      <div className="mx-auto max-w-7xl px-6">
+    <section className="bg-white py-8 md:py-20">
+      <div className="mx-auto max-w-7xl px-4 md:px-6">
 
-        <div className="mb-14 text-center">
-
-          <p className="font-semibold uppercase tracking-widest text-[#B7D82E]">
+        <div className="mb-6 text-center md:mb-14">
+          <p className="text-sm font-semibold uppercase tracking-widest text-[#B7D82E]">
             Interior Design
           </p>
 
-          <h2 className="mt-3 text-4xl font-bold text-[#0B2E6B]">
+          <h2 className="mt-2 text-2xl font-bold text-[#0B2E6B] md:mt-3 md:text-4xl">
             Beautiful Spaces Crafted For You
           </h2>
 
-          <p className="mx-auto mt-5 max-w-3xl text-gray-600">
+          <p className="mx-auto mt-2 max-w-3xl text-sm text-gray-600 md:mt-5 md:text-base">
             We transform ordinary spaces into luxurious, functional and
             timeless interiors tailored to your lifestyle and taste.
           </p>
-
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-2">
+        <div className="grid gap-5 lg:grid-cols-2 lg:gap-8">
 
-          <div className="overflow-hidden rounded-3xl bg-white shadow-xl">
-
-            <div className="relative h-[420px]">
-
+          <div className="overflow-hidden rounded-2xl bg-white shadow-xl">
+            <div className="relative h-64 md:h-[420px]">
               <Image
                 src="/images/interiors/interior1.jpg"
                 alt="Luxury Living Room"
@@ -36,32 +32,31 @@ export default function InteriorShowcase() {
                 height={800}
                 className="h-full w-full object-cover"
               />
-
             </div>
 
-            <div className="space-y-4 p-8">
+            <div className="space-y-3 p-5 md:space-y-4 md:p-8">
 
-              <h3 className="text-3xl font-bold text-[#0B2E6B]">
+              <h3 className="text-2xl font-bold text-[#0B2E6B] md:text-3xl">
                 Luxury Living Room
               </h3>
 
-              <p className="text-gray-600">
+              <p className="text-sm text-gray-600 md:text-base">
                 Elegant interiors designed with premium finishes,
                 modern lighting, bespoke furniture and timeless aesthetics.
               </p>
 
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-wrap gap-3 md:gap-4">
 
                 <Link
                   href="/interiors"
-                  className="rounded-lg bg-[#0B2E6B] px-6 py-3 font-semibold text-white transition hover:bg-blue-900"
+                  className="rounded-lg bg-[#0B2E6B] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-900 md:px-6 md:py-3 md:text-base"
                 >
                   View Portfolio
                 </Link>
 
                 <Link
                   href="/interiors"
-                  className="rounded-lg border border-[#B7D82E] px-6 py-3 font-semibold text-[#B7D82E] transition hover:bg-[#B7D82E] hover:text-[#0B2E6B]"
+                  className="rounded-lg border border-[#B7D82E] px-5 py-2.5 text-sm font-semibold text-[#B7D82E] transition hover:bg-[#B7D82E] hover:text-[#0B2E6B] md:px-6 md:py-3 md:text-base"
                 >
                   Request Design
                 </Link>
@@ -69,10 +64,10 @@ export default function InteriorShowcase() {
               </div>
 
             </div>
-
           </div>
 
-          <div className="grid grid-cols-2 gap-6">
+
+          <div className="grid grid-cols-2 gap-3 md:gap-6">
 
             {[
               {
@@ -94,11 +89,10 @@ export default function InteriorShowcase() {
             ].map((item) => (
               <div
                 key={item.title}
-                className="overflow-hidden rounded-2xl bg-white shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-xl"
+                className="overflow-hidden rounded-xl bg-white shadow-lg"
               >
 
-                <div className="relative h-56">
-
+                <div className="relative h-36 md:h-56">
                   <Image
                     src={item.image}
                     alt={item.title}
@@ -106,15 +100,12 @@ export default function InteriorShowcase() {
                     height={600}
                     className="h-full w-full object-cover"
                   />
-
                 </div>
 
-                <div className="p-4">
-
-                  <h4 className="text-lg font-semibold text-[#0B2E6B]">
+                <div className="p-3 md:p-4">
+                  <h4 className="text-sm font-semibold text-[#0B2E6B] md:text-lg">
                     {item.title}
                   </h4>
-
                 </div>
 
               </div>

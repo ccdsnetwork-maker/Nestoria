@@ -2,32 +2,38 @@ import Link from "next/link";
 
 export default function CTA() {
   return (
-    <section className="bg-[#0B2E6B] px-6 py-20 text-white">
-      <div className="mx-auto max-w-5xl text-center">
-        <h2 className="text-3xl font-extrabold md:text-5xl">
-          Ready to Find Your Perfect Space?
+    <section className="bg-[#0B2E6B] py-10 md:py-20">
+      <div className="mx-auto max-w-7xl px-4 text-center md:px-6">
+
+        <h2 className="text-2xl font-bold text-white md:text-4xl">
+          Ready To Find Your Perfect Space?
         </h2>
 
-        <p className="mx-auto mt-5 max-w-2xl text-gray-200">
-          Whether you are buying, renting, selling, or transforming your
-          space, Nestoria Interiors & Properties is ready to help.
+        <p className="mx-auto mt-3 max-w-3xl text-sm text-gray-200 md:mt-5 md:text-base">
+          Whether you are buying, renting or transforming your property,
+          Nestoria is here to guide you every step of the way.
         </p>
 
-        <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
+
+        <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row md:mt-8 md:gap-5">
+
           <Link
             href="/properties"
-            className="rounded-xl bg-[#FFF700] px-8 py-4 font-bold text-[#0B2E6B]"
+            className="rounded-lg bg-[#FFF700] px-6 py-3 text-sm font-bold text-[#0B2E6B] transition hover:opacity-90 md:px-8 md:text-base"
           >
-            Explore Properties
+            Browse Properties
           </Link>
+
 
           <Link
             href="/interiors"
-            className="rounded-xl border-2 border-white px-8 py-4 font-bold transition hover:bg-white hover:text-[#0B2E6B]"
+            className="rounded-lg border border-white px-6 py-3 text-sm font-bold text-white transition hover:bg-white hover:text-[#0B2E6B] md:px-8 md:text-base"
           >
-            Book Interior Consultation
+            Interior Design
           </Link>
+
         </div>
+
       </div>
     </section>
   );
