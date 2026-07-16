@@ -1,0 +1,868 @@
+{
+  "states": [
+    {
+      "name": "Abia",
+      "cities": [
+        {
+          "name": "Umuahia",
+          "lgas": [
+            "Umuahia North",
+            "Umuahia South"
+          ]
+        },
+        {
+          "name": "Aba",
+          "lgas": [
+            "Aba North",
+            "Aba South"
+          ]
+        },
+        {
+          "name": "Arochukwu",
+          "lgas": [
+            "Arochukwu"
+          ]
+        },
+        {
+          "name": "Ohafia",
+          "lgas": [
+            "Ohafia"
+          ]
+        }
+      ]
+    },
+
+    {
+      "name": "Adamawa",
+      "cities": [
+        {
+          "name": "Yola",
+          "lgas": [
+            "Yola North",
+            "Yola South"
+          ]
+        },
+        {
+          "name": "Mubi",
+          "lgas": [
+            "Mubi North",
+            "Mubi South"
+          ]
+        },
+        {
+          "name": "Numan",
+          "lgas": [
+            "Numan"
+          ]
+        }
+      ]
+    },
+
+    {
+      "name": "Akwa Ibom",
+      "cities": [
+        {
+          "name": "Uyo",
+          "lgas": [
+            "Uyo",
+            "Ibesikpo Asutan"
+          ]
+        },
+        {
+          "name": "Eket",
+          "lgas": [
+            "Eket",
+            "Esit Eket"
+          ]
+        },
+        {
+          "name": "Ikot Ekpene",
+          "lgas": [
+            "Ikot Ekpene"
+          ]
+        }
+      ]
+    },
+
+    {
+      "name": "Anambra",
+      "cities": [
+        {
+          "name": "Awka",
+          "lgas": [
+            "Awka North",
+            "Awka South"
+          ]
+        },
+        {
+          "name": "Onitsha",
+          "lgas": [
+            "Onitsha North",
+            "Onitsha South"
+          ]
+        },
+        {
+          "name": "Nnewi",
+          "lgas": [
+            "Nnewi North",
+            "Nnewi South"
+          ]
+        },
+        {
+          "name": "Ekwulobia",
+          "lgas": [
+            "Aguata"
+          ]
+        }
+      ]
+    },
+
+    {
+      "name": "Bauchi",
+      "cities": [
+        {
+          "name": "Bauchi",
+          "lgas": [
+            "Bauchi"
+          ]
+        },
+        {
+          "name": "Azare",
+          "lgas": [
+            "Katagum"
+          ]
+        }
+      ]
+    },
+
+    {
+      "name": "Bayelsa",
+      "cities": [
+        {
+          "name": "Yenagoa",
+          "lgas": [
+            "Yenagoa"
+          ]
+        },
+        {
+          "name": "Brass",
+          "lgas": [
+            "Brass"
+          ]
+        }
+      ]
+    },
+
+    {
+      "name": "Benue",
+      "cities": [
+        {
+          "name": "Makurdi",
+          "lgas": [
+            "Makurdi"
+          ]
+        },
+        {
+          "name": "Gboko",
+          "lgas": [
+            "Gboko"
+          ]
+        },
+        {
+          "name": "Otukpo",
+          "lgas": [
+            "Otukpo"
+          ]
+        }
+      ]
+    },
+
+    {
+      "name": "Borno",
+      "cities": [
+        {
+          "name": "Maiduguri",
+          "lgas": [
+            "Maiduguri Metropolitan",
+            "Jere"
+          ]
+        },
+        {
+          "name": "Biu",
+          "lgas": [
+            "Biu"
+          ]
+        }
+      ]
+    }
+  ,
+
+{
+  "name": "Cross River",
+  "cities": [
+    {
+      "name": "Calabar",
+      "lgas": [
+        "Calabar Municipal",
+        "Calabar South"
+      ]
+    },
+    {
+      "name": "Ogoja",
+      "lgas": [
+        "Ogoja"
+      ]
+    },
+    {
+      "name": "Ikom",
+      "lgas": [
+        "Ikom"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Delta",
+  "cities": [
+    {
+      "name": "Asaba",
+      "lgas": [
+        "Oshimili North",
+        "Oshimili South"
+      ]
+    },
+    {
+      "name": "Warri",
+      "lgas": [
+        "Warri South",
+        "Warri North",
+        "Warri South West"
+      ]
+    },
+    {
+      "name": "Sapele",
+      "lgas": [
+        "Sapele"
+      ]
+    },
+    {
+      "name": "Ughelli",
+      "lgas": [
+        "Ughelli North",
+        "Ughelli South"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Ebonyi",
+  "cities": [
+    {
+      "name": "Abakaliki",
+      "lgas": [
+        "Abakaliki"
+      ]
+    },
+    {
+      "name": "Afikpo",
+      "lgas": [
+        "Afikpo North",
+        "Afikpo South"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Edo",
+  "cities": [
+    {
+      "name": "Benin City",
+      "lgas": [
+        "Oredo",
+        "Egor",
+        "Ikpoba Okha"
+      ]
+    },
+    {
+      "name": "Auchi",
+      "lgas": [
+        "Etsako West"
+      ]
+    },
+    {
+      "name": "Ekpoma",
+      "lgas": [
+        "Esan West"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Ekiti",
+  "cities": [
+    {
+      "name": "Ado Ekiti",
+      "lgas": [
+        "Ado Ekiti"
+      ]
+    },
+    {
+      "name": "Ikere",
+      "lgas": [
+        "Ikere"
+      ]
+    },
+    {
+      "name": "Ikole",
+      "lgas": [
+        "Ikole"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Enugu",
+  "cities": [
+    {
+      "name": "Enugu",
+      "lgas": [
+        "Enugu North",
+        "Enugu South",
+        "Enugu East"
+      ]
+    },
+    {
+      "name": "Nsukka",
+      "lgas": [
+        "Nsukka"
+      ]
+    },
+    {
+      "name": "Oji River",
+      "lgas": [
+        "Oji River"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Gombe",
+  "cities": [
+    {
+      "name": "Gombe",
+      "lgas": [
+        "Gombe",
+        "Yamaltu Deba"
+      ]
+    },
+    {
+      "name": "Kaltungo",
+      "lgas": [
+        "Kaltungo"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Imo",
+  "cities": [
+    {
+      "name": "Owerri",
+      "lgas": [
+        "Owerri Municipal",
+        "Owerri North",
+        "Owerri West"
+      ]
+    },
+    {
+      "name": "Orlu",
+      "lgas": [
+        "Orlu"
+      ]
+    },
+    {
+      "name": "Okigwe",
+      "lgas": [
+        "Okigwe"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Jigawa",
+  "cities": [
+    {
+      "name": "Dutse",
+      "lgas": [
+        "Dutse"
+      ]
+    },
+    {
+      "name": "Hadejia",
+      "lgas": [
+        "Hadejia"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Kaduna",
+  "cities": [
+    {
+      "name": "Kaduna",
+      "lgas": [
+        "Kaduna North",
+        "Kaduna South"
+      ]
+    },
+    {
+      "name": "Zaria",
+      "lgas": [
+        "Zaria"
+      ]
+    },
+    {
+      "name": "Kafanchan",
+      "lgas": [
+        "Jema'a"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Kano",
+  "cities": [
+    {
+      "name": "Kano",
+      "lgas": [
+        "Kano Municipal",
+        "Dala",
+        "Fagge",
+        "Tarauni"
+      ]
+    },
+    {
+      "name": "Wudil",
+      "lgas": [
+        "Wudil"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Katsina",
+  "cities": [
+    {
+      "name": "Katsina",
+      "lgas": [
+        "Katsina"
+      ]
+    },
+    {
+      "name": "Funtua",
+      "lgas": [
+        "Funtua"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Kebbi",
+  "cities": [
+    {
+      "name": "Birnin Kebbi",
+      "lgas": [
+        "Birnin Kebbi"
+      ]
+    },
+    {
+      "name": "Argungu",
+      "lgas": [
+        "Argungu"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Kogi",
+  "cities": [
+    {
+      "name": "Lokoja",
+      "lgas": [
+        "Lokoja"
+      ]
+    },
+    {
+      "name": "Okene",
+      "lgas": [
+        "Okene"
+      ]
+    },
+    {
+      "name": "Idah",
+      "lgas": [
+        "Idah"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Kwara",
+  "cities": [
+    {
+      "name": "Ilorin",
+      "lgas": [
+        "Ilorin West",
+        "Ilorin East",
+        "Ilorin South"
+      ]
+    },
+    {
+      "name": "Offa",
+      "lgas": [
+        "Offa"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Lagos",
+  "cities": [
+    {
+      "name": "Ikeja",
+      "lgas": [
+        "Ikeja"
+      ]
+    },
+    {
+      "name": "Lekki",
+      "lgas": [
+        "Eti-Osa"
+      ]
+    },
+    {
+      "name": "Victoria Island",
+      "lgas": [
+        "Eti-Osa"
+      ]
+    },
+    {
+      "name": "Surulere",
+      "lgas": [
+        "Surulere"
+      ]
+    },
+    {
+      "name": "Ikorodu",
+      "lgas": [
+        "Ikorodu"
+      ]
+    },
+    {
+      "name": "Epe",
+      "lgas": [
+        "Epe"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Nasarawa",
+  "cities": [
+    {
+      "name": "Lafia",
+      "lgas": [
+        "Lafia"
+      ]
+    },
+    {
+      "name": "Keffi",
+      "lgas": [
+        "Keffi"
+      ]
+    },
+    {
+      "name": "Karu",
+      "lgas": [
+        "Karu"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Niger",
+  "cities": [
+    {
+      "name": "Minna",
+      "lgas": [
+        "Chanchaga",
+        "Bosso"
+      ]
+    },
+    {
+      "name": "Bida",
+      "lgas": [
+        "Bida"
+      ]
+    },
+    {
+      "name": "Suleja",
+      "lgas": [
+        "Suleja"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Ogun",
+  "cities": [
+    {
+      "name": "Abeokuta",
+      "lgas": [
+        "Abeokuta North",
+        "Abeokuta South"
+      ]
+    },
+    {
+      "name": "Ifo",
+      "lgas": [
+        "Ifo"
+      ]
+    },
+    {
+      "name": "Sagamu",
+      "lgas": [
+        "Sagamu"
+      ]
+    },
+    {
+      "name": "Ota",
+      "lgas": [
+        "Ado-Odo/Ota"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Ondo",
+  "cities": [
+    {
+      "name": "Akure",
+      "lgas": [
+        "Akure North",
+        "Akure South"
+      ]
+    },
+    {
+      "name": "Ondo",
+      "lgas": [
+        "Ondo East",
+        "Ondo West"
+      ]
+    },
+    {
+      "name": "Owo",
+      "lgas": [
+        "Owo"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Osun",
+  "cities": [
+    {
+      "name": "Osogbo",
+      "lgas": [
+        "Osogbo"
+      ]
+    },
+    {
+      "name": "Ile-Ife",
+      "lgas": [
+        "Ife Central",
+        "Ife East"
+      ]
+    },
+    {
+      "name": "Ilesa",
+      "lgas": [
+        "Ilesa East",
+        "Ilesa West"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Oyo",
+  "cities": [
+    {
+      "name": "Ibadan",
+      "lgas": [
+        "Ibadan North",
+        "Ibadan North East",
+        "Ibadan South West"
+      ]
+    },
+    {
+      "name": "Oyo",
+      "lgas": [
+        "Oyo East",
+        "Oyo West"
+      ]
+    },
+    {
+      "name": "Ogbomosho",
+      "lgas": [
+        "Ogbomosho North",
+        "Ogbomosho South"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Plateau",
+  "cities": [
+    {
+      "name": "Jos",
+      "lgas": [
+        "Jos North",
+        "Jos South"
+      ]
+    },
+    {
+      "name": "Barkin Ladi",
+      "lgas": [
+        "Barkin Ladi"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Rivers",
+  "cities": [
+    {
+      "name": "Port Harcourt",
+      "lgas": [
+        "Port Harcourt",
+        "Obio-Akpor"
+      ]
+    },
+    {
+      "name": "Bonny",
+      "lgas": [
+        "Bonny"
+      ]
+    },
+    {
+      "name": "Eleme",
+      "lgas": [
+        "Eleme"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Sokoto",
+  "cities": [
+    {
+      "name": "Sokoto",
+      "lgas": [
+        "Sokoto North",
+        "Sokoto South"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Taraba",
+  "cities": [
+    {
+      "name": "Jalingo",
+      "lgas": [
+        "Jalingo"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Yobe",
+  "cities": [
+    {
+      "name": "Damaturu",
+      "lgas": [
+        "Damaturu"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "Zamfara",
+  "cities": [
+    {
+      "name": "Gusau",
+      "lgas": [
+        "Gusau"
+      ]
+    }
+  ]
+},
+
+{
+  "name": "FCT Abuja",
+  "cities": [
+    {
+      "name": "Abuja Municipal",
+      "lgas": [
+        "AMAC"
+      ]
+    },
+    {
+      "name": "Gwarinpa",
+      "lgas": [
+        "Bwari"
+      ]
+    },
+    {
+      "name": "Gwagwalada",
+      "lgas": [
+        "Gwagwalada"
+      ]
+    },
+    {
+      "name": "Kuje",
+      "lgas": [
+        "Kuje"
+      ]
+    }
+  ]
+}
+  ]
+}
