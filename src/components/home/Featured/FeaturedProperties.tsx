@@ -10,9 +10,9 @@ export default function FeaturedProperties() {
       <div className="mx-auto max-w-7xl px-4 md:px-6">
 
         <div className="mb-6 text-center md:mb-12">
-          <p className="text-sm font-semibold uppercase tracking-widest text-[#B7D82E]">
-            Featured Properties
-          </p>
+          <p className="inline-block rounded-full bg-[#FFF700] px-4 py-1 text-sm font-bold uppercase tracking-widest text-[#0B2E6B]">
+  Featured Properties
+</p>
 
           <h2 className="mt-2 text-2xl font-bold text-[#0B2E6B] md:mt-3 md:text-4xl">
             Discover Your Dream Property
@@ -36,8 +36,8 @@ export default function FeaturedProperties() {
         <div className="mt-6 text-center md:mt-12">
           <Link
             href="/properties"
-            className="inline-flex rounded-lg bg-[#0B2E6B] px-6 py-2.5 text-sm font-bold text-white transition hover:opacity-90 md:px-8 md:py-3 md:text-base"
-          >
+            className="inline-flex rounded-lg bg-[#FFF700] px-6 py-2.5 text-sm font-bold text-[#0B2E6B] transition hover:opacity-90 md:px-8 md:py-3 md:text-base"
+         >
             View All Properties
           </Link>
         </div>

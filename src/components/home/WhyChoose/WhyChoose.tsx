@@ -39,9 +39,9 @@ export default function WhyChoose() {
 
         <div className="mb-6 text-center md:mb-14">
 
-          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[var(--accent)]">
-            WHY CHOOSE NESTORIA
-          </p>
+          <p className="inline-block rounded-full bg-[#FFF700] px-4 py-1 text-sm font-bold uppercase tracking-[0.3em] text-[#0B2E6B]">
+ WHY CHOOSE NESTORIA
+</p>
 
           <h2 className="mt-2 text-2xl font-bold text-[var(--heading)] md:mt-4 md:text-4xl">
             Your Trusted Property Partner

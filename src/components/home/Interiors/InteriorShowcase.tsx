@@ -7,9 +7,9 @@ export default function InteriorShowcase() {
       <div className="mx-auto max-w-7xl px-4 md:px-6">
 
         <div className="mb-6 text-center md:mb-14">
-          <p className="text-sm font-semibold uppercase tracking-widest text-[#B7D82E]">
-            Interior Design
-          </p>
+          <p className="inline-block rounded-full bg-[#FFF700] px-4 py-1 text-sm font-bold uppercase tracking-widest text-[#0B2E6B]">
+  Interior Design
+</p>
 
           <h2 className="mt-2 text-2xl font-bold text-[#0B2E6B] md:mt-3 md:text-4xl">
             Beautiful Spaces Crafted For You
@@ -49,14 +49,14 @@ export default function InteriorShowcase() {
 
                 <Link
                   href="/interiors"
-                  className="rounded-lg bg-[#0B2E6B] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-900 md:px-6 md:py-3 md:text-base"
+                  className="rounded-lg bg-[#FFF700] px-5 py-2.5 text-sm font-semibold text-[#0B2E6B] transition hover:opacity-90 md:px-6 md:py-3 md:text-base"
                 >
                   View Portfolio
                 </Link>
 
                 <Link
                   href="/interiors"
-                  className="rounded-lg border border-[#B7D82E] px-5 py-2.5 text-sm font-semibold text-[#B7D82E] transition hover:bg-[#B7D82E] hover:text-[#0B2E6B] md:px-6 md:py-3 md:text-base"
+                  className="rounded-lg border border-[#0B2E6B] bg-white px-5 py-2.5 text-sm font-semibold text-[#0B2E6B] transition hover:bg-[#0B2E6B] hover:text-white md:px-6 md:py-3 md:text-base"
                 >
                   Request Design
                 </Link>

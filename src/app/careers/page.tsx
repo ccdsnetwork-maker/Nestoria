@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { MessagesSquare } from "lucide-react";
 import BackButton from "@/components/layout/BackButton";
 
 const positions = [
@@ -158,7 +159,10 @@ export default function Careers() {
                 href="/messages"
                 className="flex-1 rounded-lg bg-green-600 py-3 text-center font-bold text-white transition hover:bg-green-700"
               >
-                Chat With Recruitment/Admin
+                <div className="flex items-center justify-center gap-2">
+  <MessagesSquare size={19} />
+  Chat With Recruitment/Admin
+</div>
               </Link>
 
             </div>

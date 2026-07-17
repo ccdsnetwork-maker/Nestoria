@@ -29,9 +29,9 @@ export default function Testimonials() {
 
         <div className="mb-6 text-center md:mb-12">
 
-          <p className="text-sm font-semibold uppercase tracking-widest text-green-500">
-            Testimonials
-          </p>
+          <p className="inline-block rounded-full bg-[#FFF700] px-4 py-1 text-sm font-bold uppercase tracking-widest text-[#0B2E6B]">
+ Testimonials
+</p>
 
           <h2 className="mt-2 text-2xl font-bold text-[#0B2E6B] md:text-4xl">
             What Our Clients Say

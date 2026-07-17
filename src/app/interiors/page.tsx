@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { MessagesSquare } from "lucide-react";
 import Link from "next/link";
 import BackButton from "@/components/layout/BackButton";
 
@@ -293,7 +294,10 @@ export default function Interiors() {
                 href="/messages/new?recipient=interior-team&type=interior"
                 className="flex-1 rounded-lg bg-green-600 py-3 text-center font-bold text-white"
               >
-                Chat With Interior Team
+                <div className="flex items-center justify-center gap-2">
+  <MessagesSquare size={19} />
+  Chat With Interior Team
+</div>
               </Link>
 
             </div>

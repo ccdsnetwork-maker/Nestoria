@@ -1,10 +1,11 @@
 import {
   Mail,
   Phone,
-  MessageCircle,
   Camera,
   MapPin,
 } from "lucide-react";
+
+import { FaWhatsapp, FaInstagram } from "react-icons/fa";
 
 import Link from "next/link";
 
@@ -47,18 +48,18 @@ export default function Footer() {
 
 
               <p className="flex items-center gap-3">
-                <MessageCircle size={18} />
-                <span>
-                  08168049408
-                </span>
+                <FaWhatsapp size={18} />
+<span>
+08168049408
+</span>
               </p>
 
 
               <p className="flex items-center gap-3">
                 <Camera size={18} />
-                <span>
-                  @nestoria_properties_
-                </span>
+<span>
+@nestoria_properties_
+</span>
               </p>
 
 
