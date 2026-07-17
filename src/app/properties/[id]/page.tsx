@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { FaWhatsapp } from "react-icons/fa";
+import { Phone, MessagesSquare } from "lucide-react";
 import { featuredProperties } from "@/components/home/Featured/PropertyData";
 import BackButton from "@/components/layout/BackButton";
 
@@ -199,40 +201,33 @@ export default async function PropertyDetails({ params }: PageProps) {
 
               <div className="mt-6 flex flex-col gap-3">
 
+  <button
+    className="flex items-center justify-center gap-2 rounded-lg bg-[#0B2E6B] py-3 font-bold text-white"
+  >
+    <Phone size={19} />
+    Call Agent
+  </button>
 
-                <button
-                  className="rounded-lg bg-[#0B2E6B] py-3 font-bold text-white"
-                >
-                  📞 Call Agent
-                </button>
+  <button
+    className="flex items-center justify-center gap-2 rounded-lg bg-green-600 py-3 font-bold text-white"
+  >
+    <FaWhatsapp size={21} />
+    WhatsApp Agent
+  </button>
 
+  <Link
+    href={`/messages/new?recipient=${property.agent}&type=property`}
+    className="flex items-center justify-center gap-2 rounded-lg border border-[#0B2E6B] py-3 text-center font-bold text-[#0B2E6B]"
+  >
+    <MessagesSquare size={19} />
+    Chat Agent
+  </Link>
 
-
-                <button
-                  className="rounded-lg bg-green-600 py-3 font-bold text-white"
-                >
-                  WhatsApp Agent
-                </button>
-
-
-
-                <Link
-                  href={`/messages/new?recipient=${property.agent}&type=property`}
-                  className="rounded-lg border border-[#0B2E6B] py-3 text-center font-bold text-[#0B2E6B]"
-                >
-                  Chat With Agent
-                </Link>
-
-
-
-                <button
-                  className="rounded-lg bg-[#FFF700] py-3 font-bold text-[#0B2E6B]"
-                >
-                  Book Inspection
-                </button>
+</div>
 
 
-              </div>
+
+         
 
 
             </section>
