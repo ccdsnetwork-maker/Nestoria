@@ -1,102 +1,114 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
-type Property = {
-  id:number;
-  title:string;
-  location:string;
-  price:string;
-  status:string;
-  featured:boolean;
-};
-
-
-const initialProperties:Property[]=[
-{
-id:1,
-title:"Modern 4 Bedroom Duplex",
-location:"Ibadan",
-price:"₦85,000,000",
-status:"Approved",
-featured:true
-},
-{
-id:2,
-title:"Luxury Apartment",
-location:"Lagos",
-price:"₦5,000,000/year",
-status:"Pending",
-featured:false
-}
-];
+import {
+getProperties,
+deleteProperty,
+approveProperty,
+toggleFeatured,
+Property,
+} from "@/services/propertyService";
 
 
 export default function Properties(){
 
-const [properties,setProperties]=useState(initialProperties);
+const router = useRouter();
+
+const [properties,setProperties] = useState<Property[]>([]);
+
+const [loading,setLoading] = useState(true);
+
+const [message,setMessage] = useState("");
 
 
-const deleteProperty=(id:number)=>{
-setProperties(
-properties.filter(property=>property.id!==id)
-);
-};
 
+async function loadProperties(){
 
-const toggleFeatured=(id:number)=>{
-setProperties(
-properties.map(property=>
-property.id===id
-?
-{
-...property,
-featured:!property.featured
+try{
+
+setLoading(true);
+
+const data = await getProperties();
+
+setProperties(data);
+
 }
-:
-property
-)
-);
-};
 
+catch(error){
 
-const approveProperty=(id:number)=>{
-setProperties(
-properties.map(property=>
-property.id===id
-?
-{
-...property,
-status:"Approved"
+console.log(error);
+
+setMessage("Failed to load properties");
+
 }
-:
-property
-)
-);
-};
+
+finally{
+
+setLoading(false);
+
+}
+
+}
 
 
-return(
 
-<div className="w-full min-w-0">
+useEffect(()=>{
+
+loadProperties();
+
+},[]);
 
 
-<div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+
+
+return (
 
 <div>
+
+
 <h2 className="text-3xl font-extrabold text-[#0B2E6B]">
+
 Property Management
+
 </h2>
 
-<p className="mt-2 text-gray-600">
-Manage property listings, approvals and featured properties.
+
+
+{message && (
+
+<p className="mt-4 rounded-lg bg-gray-100 p-3 text-sm">
+
+{message}
+
 </p>
 
-</div>
+)}
 
 
-<button className="rounded-lg bg-[#FFF700] px-5 py-3 text-sm font-bold text-[#0B2E6B]">
-+ Add Property
+
+
+<div className="mt-6 rounded-xl bg-white p-5 shadow-md">
+
+
+<h3 className="font-bold text-[#0B2E6B]">
+
+Property Actions
+
+</h3>
+
+
+<button
+
+onClick={()=>router.push("/properties/list")}
+
+className="mt-4 rounded-lg bg-[#FFF700] px-5 py-3 font-bold text-[#0B2E6B]"
+
+>
+
+Add Property
+
 </button>
 
 
@@ -106,38 +118,25 @@ Manage property listings, approvals and featured properties.
 
 
 
-<div className="mt-8 w-full overflow-hidden rounded-xl bg-white shadow-md">
+<div className="mt-8 overflow-x-auto rounded-xl bg-white shadow-md">
 
 
-<div className="w-full overflow-x-auto">
-
-
-<table className="min-w-[850px] w-full">
+<table className="w-full min-w-[800px]">
 
 
 <thead className="bg-[#0B2E6B] text-white">
 
 <tr>
 
-<th className="p-4 text-left text-sm">
-Property
-</th>
+<th className="p-4 text-left">Property</th>
 
-<th className="p-4 text-left text-sm">
-Location
-</th>
+<th className="p-4 text-left">Location</th>
 
-<th className="p-4 text-left text-sm">
-Price
-</th>
+<th className="p-4 text-left">Price</th>
 
-<th className="p-4 text-left text-sm">
-Status
-</th>
+<th className="p-4 text-left">Status</th>
 
-<th className="p-4 text-left text-sm">
-Actions
-</th>
+<th className="p-4 text-left">Actions</th>
 
 </tr>
 
@@ -148,57 +147,70 @@ Actions
 <tbody>
 
 
-{
-properties.map(property=>(
+{loading && (
 
-<tr
-key={property.id}
-className="border-b"
->
+<tr>
+
+<td colSpan={5} className="p-5 text-center">
+
+Loading properties...
+
+</td>
+
+</tr>
+
+)}
 
 
-<td className="p-4">
 
-<p className="font-bold text-[#0B2E6B]">
+{!loading && properties.length===0 && (
+
+<tr>
+
+<td colSpan={5} className="p-5 text-center">
+
+No properties found in database
+
+</td>
+
+</tr>
+
+)}
+
+
+
+{properties.map((property)=>(
+
+
+<tr key={property.id} className="border-b">
+
+
+<td className="p-4 font-bold text-[#0B2E6B]">
+
 {property.title}
-</p>
-
-
-{
-property.featured &&
-<span className="mt-2 inline-block rounded-full bg-[#FFF700] px-3 py-1 text-xs font-bold text-[#0B2E6B]">
-Featured
-</span>
-}
-
 
 </td>
-
-
-
-<td className="p-4 text-sm">
-{property.location}
-</td>
-
-
-
-<td className="p-4 text-sm">
-{property.price}
-</td>
-
 
 
 <td className="p-4">
 
-<span className="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
+{property.location}
+
+</td>
+
+
+<td className="p-4">
+
+{property.price}
+
+</td>
+
+
+<td className="p-4">
 
 {property.status}
 
-</span>
-
 </td>
-
-
 
 
 <td className="p-4">
@@ -208,42 +220,49 @@ Featured
 
 
 <button
-className="rounded-lg bg-[#0B2E6B] px-3 py-2 text-xs font-semibold text-white"
+
+onClick={()=>approveProperty(property.id!)}
+
+className="rounded bg-green-600 px-3 py-2 text-xs text-white"
+
 >
-Edit
-</button>
 
-
-
-<button
-onClick={()=>approveProperty(property.id)}
-className="rounded-lg bg-green-600 px-3 py-2 text-xs font-semibold text-white"
->
 Approve
+
 </button>
 
 
 
 <button
-onClick={()=>toggleFeatured(property.id)}
-className="rounded-lg bg-yellow-500 px-3 py-2 text-xs font-semibold text-white"
+
+onClick={()=>toggleFeatured(property.id!,!property.featured)}
+
+className="rounded bg-[#0B2E6B] px-3 py-2 text-xs text-white"
+
 >
-{
-property.featured
-?
-"Unfeature"
-:
-"Feature"
-}
+
+Featured
+
 </button>
 
 
 
 <button
-onClick={()=>deleteProperty(property.id)}
-className="rounded-lg bg-red-600 px-3 py-2 text-xs font-semibold text-white"
+
+onClick={async()=>{
+
+await deleteProperty(property.id!);
+
+loadProperties();
+
+}}
+
+className="rounded bg-red-600 px-3 py-2 text-xs text-white"
+
 >
+
 Delete
+
 </button>
 
 
@@ -253,21 +272,16 @@ Delete
 </td>
 
 
-
 </tr>
 
-))
 
-}
+))}
 
 
 </tbody>
 
 
 </table>
-
-
-</div>
 
 
 </div>
