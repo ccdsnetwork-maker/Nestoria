@@ -1,45 +1,19 @@
-import { initializeApp, getApps } from "firebase/app";
+import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
-import { getStorage } from "firebase/storage";
-
 
 const firebaseConfig = {
-
-apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-
-authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-
-databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
-
-projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-
-storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-
-messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-
-appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-
-measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
-
+  apiKey: "AIzaSyDa31wtYOenQTcs_B1NsqrF6V7mk6imOsA",
+  authDomain: "nestoria1.firebaseapp.com",
+  databaseURL: "https://nestoria1-default-rtdb.firebaseio.com",
+  projectId: "nestoria1",
+  storageBucket: "nestoria1.firebasestorage.app",
+  messagingSenderId: "573003414979",
+  appId: "1:573003414979:web:e63dc1aef12b4fec761176",
+  measurementId: "G-B5JZS1LYDK",
 };
 
-
-
-const app =
-getApps().length
-?
-getApps()[0]
-:
-initializeApp(firebaseConfig);
-
-
+const app = initializeApp(firebaseConfig);
 
 export const db = getFirestore(app);
-
-export const auth = getAuth(app);
-
-export const storage = getStorage(app);
-
 
 export default app;
