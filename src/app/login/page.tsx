@@ -9,7 +9,6 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 
 import auth from "@/lib/auth";
 
-
 export default function Login() {
 
   const router = useRouter();
@@ -20,28 +19,21 @@ export default function Login() {
   const [password,setPassword] = useState("");
 
 
-
   async function login(){
 
     if(!email.trim()){
-
       alert("Please enter your email address.");
       return;
-
     }
 
 
     if(!password.trim()){
-
       alert("Please enter your password.");
       return;
-
     }
 
 
-
     try{
-
 
       await signInWithEmailAndPassword(
         auth,
@@ -50,26 +42,16 @@ export default function Login() {
       );
 
 
-      alert("Login successful.");
-
-
       router.push("/dashboard");
-
 
 
     }catch(error:any){
 
-
       alert(error.message);
-
 
     }
 
-
   }
-
-
-
 
 
   return (
@@ -88,17 +70,13 @@ export default function Login() {
 
 
           <p className="mt-5 text-base leading-7 text-blue-100">
-
             Sign in to continue managing your properties,
             property requests, interior design projects and
             all your Nestoria activities from one secure dashboard.
-
           </p>
 
 
-
           <div className="mt-8 rounded-xl bg-white/10 p-5">
-
 
             <h2 className="font-bold">
               Why Sign In?
@@ -122,11 +100,7 @@ export default function Login() {
         </section>
 
 
-
-
-
         <section>
-
 
           <BackButton />
 
@@ -142,13 +116,7 @@ export default function Login() {
             <p className="mt-2 text-sm text-gray-600">
               Enter your account details below.
             </p>
-
-
-
-
-
             <div className="mt-8 space-y-5">
-
 
 
               <div>
@@ -159,7 +127,6 @@ export default function Login() {
 
 
                 <div className="relative">
-
 
                   <Mail
                     size={18}
@@ -181,19 +148,13 @@ export default function Login() {
 
                   />
 
-
                 </div>
-
 
               </div>
 
 
 
-
-
-
               <div>
-
 
                 <label className="mb-2 block text-sm font-semibold">
                   Password
@@ -204,13 +165,9 @@ export default function Login() {
 
 
                   <Lock
-
                     size={18}
-
                     className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
-
                   />
-
 
 
                   <input
@@ -228,8 +185,6 @@ export default function Login() {
                   />
 
 
-
-
                   <button
 
                     type="button"
@@ -240,7 +195,6 @@ export default function Login() {
 
                   >
 
-
                     {
                       showPassword
                       ?
@@ -249,18 +203,13 @@ export default function Login() {
                       <Eye size={18}/>
                     }
 
-
                   </button>
-
 
 
                 </div>
 
 
               </div>
-
-
-
 
 
 
@@ -277,7 +226,6 @@ export default function Login() {
 
 
 
-
                 <Link
 
                   href="/forgot-password"
@@ -291,12 +239,7 @@ export default function Login() {
                 </Link>
 
 
-
               </div>
-
-
-
-
 
 
 
@@ -314,8 +257,6 @@ export default function Login() {
 
 
 
-
-
               <button
 
                 type="button"
@@ -327,13 +268,6 @@ export default function Login() {
                 Continue with Google
 
               </button>
-
-
-
-
-
-
-
               <p className="text-center text-sm text-gray-600">
 
                 Don't have an account?{" "}
@@ -355,8 +289,6 @@ export default function Login() {
               </p>
 
 
-
-
             </div>
 
 
@@ -364,7 +296,6 @@ export default function Login() {
 
 
         </section>
-
 
 
       </div>
