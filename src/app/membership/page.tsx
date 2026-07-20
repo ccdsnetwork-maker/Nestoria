@@ -899,17 +899,7 @@ and manage more property opportunities.
 
 
 
-<button
 
-onClick={()=>handleUpgrade(plans[1])}
-
-className="mt-6 rounded-lg bg-[#FFF700] px-8 py-3 font-bold text-[#0B2E6B]"
-
->
-
-Upgrade Account
-
-</button>
 
 
 

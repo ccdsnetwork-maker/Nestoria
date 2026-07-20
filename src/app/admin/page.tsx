@@ -6,6 +6,7 @@ import Dashboard from "@/components/admin/modules/Dashboard";
 import Properties from "@/components/admin/modules/Properties";
 import Users from "@/components/admin/modules/Users";
 import Membership from "@/components/admin/modules/Membership";
+import MemberApproval from "@/components/admin/modules/MemberApproval";
 import Interiors from "@/components/admin/modules/Interiors";
 import Content from "@/components/admin/modules/Content";
 import Messages from "@/components/admin/modules/Messages";
@@ -13,14 +14,15 @@ import Settings from "@/components/admin/modules/Settings";
 
 
 const menu = [
-{ id:"dashboard", title:"Dashboard", icon:"📊" },
-{ id:"properties", title:"Properties", icon:"🏠" },
-{ id:"users", title:"Users", icon:"👥" },
-{ id:"membership", title:"Membership Plans", icon:"💳" },
-{ id:"interiors", title:"Interior Projects", icon:"🛋" },
-{ id:"content", title:"Website Content", icon:"📝" },
-{ id:"messages", title:"Messages", icon:"💬" },
-{ id:"settings", title:"Settings", icon:"⚙️" },
+  { id:"dashboard", title:"Dashboard", icon:"📊" },
+  { id:"properties", title:"Properties", icon:"🏠" },
+  { id:"users", title:"Users", icon:"👥" },
+  { id:"membership", title:"Membership Plans", icon:"💳" },
+  { id:"memberApproval", title:"Member Approval", icon:"✅" },
+  { id:"interiors", title:"Interior Projects", icon:"🛋" },
+  { id:"content", title:"Website Content", icon:"📝" },
+  { id:"messages", title:"Messages", icon:"💬" },
+  { id:"settings", title:"Settings", icon:"⚙️" },
 ];
 
 
@@ -68,6 +70,9 @@ return <Users />;
 case "membership":
 return <Membership />;
 
+case "memberApproval":
+return <MemberApproval />;
+
 case "interiors":
 return <Interiors />;
 
@@ -88,21 +93,19 @@ return <Dashboard />;
 };
 
 
+
 return(
 
 <main className="min-h-screen overflow-x-hidden bg-gray-100">
-
 
 <div className="flex flex-col md:flex-row min-w-0">
 
 
 <aside className="bg-[#0B2E6B] p-6 text-white md:min-h-screen md:w-72">
 
-
 <h1 className="text-3xl font-extrabold">
 Nestoria CMS
 </h1>
-
 
 <p className="mt-2 text-blue-100">
 Administration Panel
@@ -114,8 +117,11 @@ Administration Panel
 {menu.map(item=>(
 
 <button
+
 key={item.id}
+
 onClick={()=>handleClick(item.id)}
+
 className={`flex w-full items-center gap-3 rounded-lg p-3 text-left font-semibold ${
 active===item.id
 ?
@@ -123,6 +129,7 @@ active===item.id
 :
 "hover:bg-white/10"
 }`}
+
 >
 
 <span className="text-xl">
@@ -136,6 +143,7 @@ active===item.id
 ))}
 
 </nav>
+
 
 </aside>
 
@@ -175,6 +183,11 @@ active===item.id
 </div>
 
 
+<div id="memberApproval">
+<MemberApproval />
+</div>
+
+
 <div id="interiors">
 <Interiors />
 </div>
@@ -202,7 +215,6 @@ active===item.id
 
 
 </div>
-
 
 </main>
 
