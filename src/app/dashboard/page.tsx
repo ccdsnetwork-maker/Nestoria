@@ -2,6 +2,11 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+
+import auth from "@/lib/auth";
+import { db } from "@/lib/firebase";
 import BackButton from "@/components/layout/BackButton";
 
 
@@ -55,386 +60,627 @@ const saved = [
 
 const messages = [
   {
-    id: "support",
-    sender: "Nestoria Support",
-    message: "Welcome to Nestoria",
-    date: "Today",
+    id:"support",
+    sender:"Nestoria Support",
+    message:"Welcome to Nestoria",
+    date:"Today",
   },
 ];
 
 
-export default function Dashboard() {
+export default function Dashboard(){
 
-const [active, setActive] = useState("properties");
+
+const [active,setActive]=useState("properties");
+
+
+const [profile,setProfile]=useState({
+  fullName:"User Name",
+  email:"user@email.com",
+  phone:"",
+  photoURL:"",
+});
+
 
 const contentRef = useRef<HTMLDivElement | null>(null);
 
-useEffect(() => {
-  if (window.innerWidth < 768) {
-    setTimeout(() => {
-      contentRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }, 100);
-  }
-}, [active]);
-
-  return (
-
-    <main className="min-h-screen bg-gray-100 py-10 md:py-20">
-
-      <div className="mx-auto max-w-6xl px-4 md:px-6">
-
-        <BackButton />
 
 
-        <section className="mt-6 rounded-2xl bg-[#0B2E6B] p-8 text-white shadow-md">
+useEffect(()=>{
 
-          <h1 className="text-4xl font-extrabold">
-            Welcome Back To Nestoria
-          </h1>
+const unsubscribe = onAuthStateChanged(
+auth,
+async(user)=>{
 
-          <p className="mt-3 text-blue-100">
-            Manage your properties, requests, interior projects and account.
-          </p>
-
-        </section>
+if(!user) return;
 
 
-        <section
-  ref={contentRef}
-  className="mt-8 rounded-2xl bg-white p-6 shadow-md"
->
+let userData:any={
 
-          <div className="flex flex-col gap-6 md:flex-row md:items-center">
+fullName:user.displayName || "Nestoria User",
+email:user.email || "",
+phone:"",
+photoURL:user.photoURL || "",
 
-            <div className="flex h-28 w-28 items-center justify-center rounded-full bg-gray-200 text-5xl">
-              👤
-            </div>
+};
 
 
-            <div>
 
-              <h2 className="text-2xl font-bold text-[#0B2E6B]">
-                User Name
-              </h2>
-
-              <p className="text-gray-600">
-                user@email.com
-              </p>
-
-              <p className="text-gray-600">
-                08000000000
-              </p>
-
-              <p className="text-gray-600">
-                Lagos, Nigeria
-              </p>
-
-            </div>
+const userRef=doc(
+db,
+"users",
+user.uid
+);
 
 
-            <Link
-              href="/profile"
-              className="md:ml-auto rounded-lg bg-[#FFF700] px-6 py-3 text-center font-bold text-[#0B2E6B]"
-            >
-              Edit Profile
-            </Link>
+
+const snapshot=await getDoc(userRef);
 
 
-          </div>
 
-        </section>
+if(snapshot.exists()){
+
+userData={
+...userData,
+...snapshot.data(),
+};
+
+}
 
 
-        <section className="mt-8 rounded-2xl bg-white p-6 shadow-md">
 
-          <h2 className="text-2xl font-bold text-[#0B2E6B]">
-<section className="mt-8 rounded-2xl bg-white p-6 shadow-md">
-  <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+setProfile(userData);
 
-    <div>
-      <h2 className="text-2xl font-bold text-[#0B2E6B]">
-        Membership Status
-      </h2>
 
-      <p className="mt-2 text-gray-600">
-        Your current Nestoria account plan
-      </p>
+}
 
-      <div className="mt-3 inline-block rounded-full bg-blue-100 px-4 py-2 font-bold text-[#0B2E6B]">
-        🟦 Basic Member
-      </div>
-    </div>
+);
 
-    <Link
-      href="/membership"
-      className="rounded-lg bg-[#FFF700] px-6 py-3 text-center font-bold text-[#0B2E6B]"
-    >
-      Upgrade Account
-    </Link>
 
-  </div>
+
+return unsubscribe;
+
+
+},[]);
+
+
+
+useEffect(()=>{
+
+if(window.innerWidth < 768){
+
+setTimeout(()=>{
+
+contentRef.current?.scrollIntoView({
+behavior:"smooth",
+block:"start",
+});
+
+},100);
+
+}
+
+},[active]);
+return (
+
+<main className="min-h-screen bg-gray-100 py-10 md:py-20">
+
+
+<div className="mx-auto max-w-6xl px-4 md:px-6">
+
+
+<BackButton />
+
+
+<section className="mt-6 rounded-2xl bg-[#0B2E6B] p-8 text-white shadow-md">
+
+<h1 className="text-4xl font-extrabold">
+Welcome Back To Nestoria
+</h1>
+
+
+<p className="mt-3 text-blue-100">
+Manage your properties, requests, interior projects and account.
+</p>
+
+
 </section>
-            Dashboard Menu
-          </h2>
 
 
-          <div className="mt-5 grid gap-4 md:grid-cols-3">
-
-            {sections.map((section) => (
-
-              <button
-                key={section.id}
-                onClick={() => setActive(section.id)}
-                className={`rounded-xl p-5 text-left shadow-md ${
-                  active === section.id
-                    ? "bg-[#0B2E6B] text-white"
-                    : "bg-gray-100"
-                }`}
-              >
-
-                <div className="text-3xl">
-                  {section.icon}
-                </div>
-
-                <h3 className="mt-3 font-bold">
-                  {section.title}
-                </h3>
-
-              </button>
-
-            ))}
-
-          </div>
-
-        </section>
 
 
-       <section
-  ref={contentRef}
-  className="mt-8 rounded-2xl bg-white p-6 shadow-md"
+<section
+ref={contentRef}
+className="mt-8 rounded-2xl bg-white p-6 shadow-md"
 >
-          {active === "properties" && (
 
-            <div>
 
-              <h2 className="text-2xl font-bold text-[#0B2E6B]">
-                🏠 My Properties
-              </h2>
+<div className="flex flex-col gap-6 md:flex-row md:items-center">
 
-              {properties.map((item) => (
 
-                <div key={item.name} className="mt-5 rounded-lg border p-4">
+<div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full bg-gray-200 text-5xl">
 
-                  <p className="font-bold">
-                    {item.name}
-                  </p>
+{
+profile.photoURL
+?
+<img
+src={profile.photoURL}
+alt="Profile"
+className="h-full w-full object-cover"
+/>
+:
+"👤"
+}
 
-                  <p>
-                    📍 {item.location}
-                  </p>
+</div>
 
-                  <p>
-                    Status: {item.status}
-                  </p>
 
-                  <p>
-                    Views: {item.views}
-                  </p>
 
-                </div>
 
-              ))}
+<div>
 
-            </div>
 
-          )}
-          {active === "requests" && (
+<h2 className="text-2xl font-bold text-[#0B2E6B]">
+{profile.fullName}
+</h2>
 
-            <div>
-              <h2 className="text-2xl font-bold text-[#0B2E6B]">
-                🔍 My Requests
-              </h2>
 
-              {requests.map((item) => (
+<p className="text-gray-600">
+{profile.email}
+</p>
 
-                <div key={item.name} className="mt-5 rounded-lg border p-4">
 
-                  <p className="font-bold">{item.name}</p>
-                  <p>📍 {item.location}</p>
-                  <p>Budget: {item.budget}</p>
-                  <p>Status: {item.status}</p>
+<p className="text-gray-600">
+{profile.phone || "No phone number added"}
+</p>
 
-                </div>
 
-              ))}
+<p className="text-gray-600">
+Lagos, Nigeria
+</p>
 
-            </div>
 
-          )}
+</div>
 
 
 
-          {active === "interiors" && (
+<Link
+href="/profile"
+className="md:ml-auto rounded-lg bg-[#FFF700] px-6 py-3 text-center font-bold text-[#0B2E6B]"
+>
+Edit Profile
+</Link>
 
-            <div>
 
-              <h2 className="text-2xl font-bold text-[#0B2E6B]">
-                🛋 Interior Projects
-              </h2>
 
-              {interiors.map((item) => (
+</div>
 
-                <div key={item.name} className="mt-5 rounded-lg border p-4">
 
-                  <p className="font-bold">{item.name}</p>
-                  <p>Type: {item.type}</p>
-                  <p>Status: {item.status}</p>
+</section>
 
-                </div>
 
-              ))}
 
-            </div>
 
-          )}
 
+<section className="mt-8 rounded-2xl bg-white p-6 shadow-md">
 
 
-          {active === "saved" && (
+<div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 
-            <div>
 
-              <h2 className="text-2xl font-bold text-[#0B2E6B]">
-                ❤️ Saved Properties
-              </h2>
+<div>
 
-              {saved.map((item) => (
 
-                <div key={item.name} className="mt-5 rounded-lg border p-4">
+<h2 className="text-2xl font-bold text-[#0B2E6B]">
+Membership Status
+</h2>
 
-                  <p className="font-bold">{item.name}</p>
-                  <p>📍 {item.location}</p>
-                  <p>{item.price}</p>
 
-                </div>
+<p className="mt-2 text-gray-600">
+Your current Nestoria account plan
+</p>
 
-              ))}
 
-            </div>
+<div className="mt-3 inline-block rounded-full bg-blue-100 px-4 py-2 font-bold text-[#0B2E6B]">
+🟦 Basic Member
+</div>
 
-          )}
 
+</div>
 
 
-          {active === "messages" && (
 
-            <div>
+<Link
+href="/membership"
+className="rounded-lg bg-[#FFF700] px-6 py-3 text-center font-bold text-[#0B2E6B]"
+>
+Upgrade Account
+</Link>
 
-              <h2 className="text-2xl font-bold text-[#0B2E6B]">
-                💬 Messages
-              </h2>
 
+</div>
 
-              {messages.map((item) => (
 
-                <div key={item.id} className="mt-5 rounded-lg border p-4">
+</section>
 
-                  <p className="font-bold">
-                    {item.sender}
-                  </p>
 
-                  <p className="mt-2">
-                    {item.message}
-                  </p>
 
-                  <p className="text-sm text-gray-500">
-                    {item.date}
-                  </p>
 
 
-                  <Link
-                    href={`/chat/${item.id}`}
-                    className="mt-4 inline-block rounded-lg bg-[#0B2E6B] px-5 py-2 font-bold text-white"
-                  >
-                    Reply
-                  </Link>
+<section className="mt-8 rounded-2xl bg-white p-6 shadow-md">
 
-                </div>
 
-              ))}
+<h2 className="text-2xl font-bold text-[#0B2E6B]">
+Dashboard Menu
+</h2>
 
 
-            </div>
+<div className="mt-5 grid gap-4 md:grid-cols-3">
 
-          )}
 
+{
+sections.map((section)=>(
 
 
-          {active === "settings" && (
+<button
+key={section.id}
+onClick={()=>setActive(section.id)}
+className={`rounded-xl p-5 text-left shadow-md ${
+active===section.id
+?
+"bg-[#0B2E6B] text-white"
+:
+"bg-gray-100"
+}`}
+>
 
-            <div>
 
-              <h2 className="text-2xl font-bold text-[#0B2E6B]">
-                ⚙️ Account Settings
-              </h2>
+<div className="text-3xl">
+{section.icon}
+</div>
 
 
-              <div className="mt-5 space-y-4">
+<h3 className="mt-3 font-bold">
+{section.title}
+</h3>
 
-                <Link
-                  href="/change-password"
-                  className="block rounded-lg border p-4"
-                >
-                  🔐 Change Password
-                </Link>
 
+</button>
 
-                <button className="w-full rounded-lg border p-4 text-left text-red-600">
-                  🗑 Delete Account
-                </button>
 
-              </div>
+))
+}
 
 
+</div>
 
-              <div className="mt-8 rounded-xl border p-5">
 
-                <h3 className="font-bold text-[#0B2E6B]">
-                  Profile Settings
-                </h3>
+</section>
+<section
+ref={contentRef}
+className="mt-8 rounded-2xl bg-white p-6 shadow-md"
+>
 
 
-                <p className="mt-2 text-gray-600">
-                  Update your personal information, profile picture,
-                  phone number and location from your profile page.
-                </p>
+{active==="properties" && (
 
+<div>
 
-                <Link
-                  href="/profile"
-                  className="mt-4 inline-block rounded-lg bg-[#0B2E6B] px-5 py-2 font-bold text-white"
-                >
-                  Open Profile Settings
-                </Link>
+<h2 className="text-2xl font-bold text-[#0B2E6B]">
+🏠 My Properties
+</h2>
 
 
-              </div>
+{
+properties.map((item)=>(
 
-            </div>
+<div
+key={item.name}
+className="mt-5 rounded-lg border p-4"
+>
 
-          )}
+<p className="font-bold">
+{item.name}
+</p>
 
 
-        </section>
+<p>
+📍 {item.location}
+</p>
 
 
-      </div>
+<p>
+Status: {item.status}
+</p>
 
-    </main>
 
-  );
+<p>
+Views: {item.views}
+</p>
+
+
+</div>
+
+))
+}
+
+
+</div>
+
+)}
+
+
+
+
+
+{active==="requests" && (
+
+<div>
+
+<h2 className="text-2xl font-bold text-[#0B2E6B]">
+🔍 My Requests
+</h2>
+
+
+{
+requests.map((item)=>(
+
+<div
+key={item.name}
+className="mt-5 rounded-lg border p-4"
+>
+
+<p className="font-bold">
+{item.name}
+</p>
+
+
+<p>
+📍 {item.location}
+</p>
+
+
+<p>
+Budget: {item.budget}
+</p>
+
+
+<p>
+Status: {item.status}
+</p>
+
+
+</div>
+
+))
+}
+
+
+</div>
+
+)}
+
+
+
+
+
+{active==="interiors" && (
+
+<div>
+
+<h2 className="text-2xl font-bold text-[#0B2E6B]">
+🛋 Interior Projects
+</h2>
+
+
+{
+interiors.map((item)=>(
+
+<div
+key={item.name}
+className="mt-5 rounded-lg border p-4"
+>
+
+<p className="font-bold">
+{item.name}
+</p>
+
+
+<p>
+Type: {item.type}
+</p>
+
+
+<p>
+Status: {item.status}
+</p>
+
+
+</div>
+
+))
+}
+
+
+</div>
+
+)}
+
+
+
+
+
+{active==="saved" && (
+
+<div>
+
+<h2 className="text-2xl font-bold text-[#0B2E6B]">
+❤️ Saved Properties
+</h2>
+
+
+{
+saved.map((item)=>(
+
+<div
+key={item.name}
+className="mt-5 rounded-lg border p-4"
+>
+
+<p className="font-bold">
+{item.name}
+</p>
+
+
+<p>
+📍 {item.location}
+</p>
+
+
+<p>
+{item.price}
+</p>
+
+
+</div>
+
+))
+}
+
+
+</div>
+
+)}
+{active==="messages" && (
+
+<div>
+
+<h2 className="text-2xl font-bold text-[#0B2E6B]">
+💬 Messages
+</h2>
+
+
+{
+messages.map((item)=>(
+
+<div
+key={item.id}
+className="mt-5 rounded-lg border p-4"
+>
+
+
+<p className="font-bold">
+{item.sender}
+</p>
+
+
+<p className="mt-2">
+{item.message}
+</p>
+
+
+<p className="text-sm text-gray-500">
+{item.date}
+</p>
+
+
+<Link
+href={`/chat/${item.id}`}
+className="mt-4 inline-block rounded-lg bg-[#0B2E6B] px-5 py-2 font-bold text-white"
+>
+Reply
+</Link>
+
+
+</div>
+
+))
+}
+
+
+</div>
+
+)}
+
+
+
+
+
+{active==="settings" && (
+
+<div>
+
+
+<h2 className="text-2xl font-bold text-[#0B2E6B]">
+⚙️ Account Settings
+</h2>
+
+
+
+<div className="mt-5 space-y-4">
+
+
+<Link
+href="/change-password"
+className="block rounded-lg border p-4"
+>
+🔐 Change Password
+</Link>
+
+
+
+<button
+className="w-full rounded-lg border p-4 text-left text-red-600"
+>
+🗑 Delete Account
+</button>
+
+
+</div>
+
+
+
+
+<div className="mt-8 rounded-xl border p-5">
+
+
+<h3 className="font-bold text-[#0B2E6B]">
+Profile Settings
+</h3>
+
+
+<p className="mt-2 text-gray-600">
+Update your personal information, profile picture,
+phone number and location from your profile page.
+</p>
+
+
+
+<Link
+href="/profile"
+className="mt-4 inline-block rounded-lg bg-[#0B2E6B] px-5 py-2 font-bold text-white"
+>
+Open Profile Settings
+</Link>
+
+
+
+</div>
+
+
+</div>
+
+)}
+
+
+</section>
+
+
+</div>
+
+
+</main>
+
+);
 
 }
