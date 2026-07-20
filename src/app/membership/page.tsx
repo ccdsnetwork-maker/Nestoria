@@ -1,491 +1,1036 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+
 import BackButton from "@/components/layout/BackButton";
+import { plans } from "@/config/membershipPlans";
 
+import { doc, getDoc } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 
-const plans = [
-  {
-    name: "Basic",
-    monthly: "Free",
-    yearly: "Free",
-    discount: "",
-    listings: "5",
-    requests: "5",
-    interior: "3",
-    popular: false,
-    features: [
-      "5 Property Listings",
-      "5 Property Requests",
-      "3 Interior Requests",
-      "Standard Visibility",
-      "Standard Support",
-    ],
-  },
-  {
-    name: "Silver",
-    monthly: "₦5,000",
-    yearly: "₦54,000",
-    discount: "10% OFF",
-    listings: "60",
-    requests: "60",
-    interior: "20",
-    popular: false,
-    features: [
-      "60 Property Listings",
-      "60 Property Requests",
-      "20 Interior Requests",
-      "Contact Visibility",
-      "Priority Approval",
-    ],
-  },
-  {
-    name: "Gold",
-    monthly: "₦12,000",
-    yearly: "₦122,400",
-    discount: "15% OFF",
-    listings: "200",
-    requests: "200",
-    interior: "60",
-    popular: true,
-    features: [
-      "200 Property Listings",
-      "200 Property Requests",
-      "60 Interior Requests",
-      "Featured Listings",
-      "High Search Ranking",
-    ],
-  },
-  {
-    name: "Platinum",
-    monthly: "₦25,000",
-    yearly: "₦240,000",
-    discount: "20% OFF",
-    listings: "Unlimited",
-    requests: "Unlimited",
-    interior: "Unlimited",
-    popular: false,
-    features: [
-      "Unlimited Listings",
-      "Unlimited Requests",
-      "Unlimited Interior Projects",
-      "Highest Visibility",
-      "Premium Support",
-    ],
-  },
-];
+import auth from "@/lib/auth";
+import { db } from "@/lib/firebase";
+
+import { updateUserMembership } from "@/services/membershipService";
 
 
 export default function MembershipPage() {
 
-  const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
 
+const [billing,setBilling] = useState<"monthly"|"yearly">("monthly");
 
-  return (
 
-    <main className="min-h-screen bg-gray-100 py-10 md:py-20">
+const [currentPlan,setCurrentPlan] = useState<any>({
+  ...plans[0],
+  billingCycle:"monthly",
+});
 
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
+const [selectedPlan,setSelectedPlan] = useState<any>(null);
 
 
-        <BackButton />
+const [showFeedback,setShowFeedback] = useState(false);
 
 
-        <section className="mt-6 rounded-2xl bg-[#0B2E6B] p-8 text-white shadow-md">
+const [loading,setLoading] = useState(true);
 
-          <h1 className="text-4xl font-extrabold md:text-5xl">
-            Nestoria Membership Plans
-          </h1>
 
-          <p className="mt-4 max-w-3xl text-blue-100">
-            Choose a plan that matches your property goals and unlock
-            more opportunities on Nestoria.
-          </p>
 
-        </section>
+useEffect(()=>{
 
 
+const unsubscribe = onAuthStateChanged(
+auth,
+async(user)=>{
 
-        <section className="mt-8 flex justify-center">
 
-          <div className="rounded-full bg-white p-2 shadow-md">
+if(!user){
 
-            <button
-              onClick={() => setBilling("monthly")}
-              className={`rounded-full px-6 py-3 font-bold ${
-                billing === "monthly"
-                  ? "bg-[#0B2E6B] text-white"
-                  : "text-gray-600"
-              }`}
-            >
-              Monthly
-            </button>
+setLoading(false);
 
+return;
 
-            <button
-              onClick={() => setBilling("yearly")}
-              className={`rounded-full px-6 py-3 font-bold ${
-                billing === "yearly"
-                  ? "bg-[#0B2E6B] text-white"
-                  : "text-gray-600"
-              }`}
-            >
-              Yearly ⭐ Save More
-            </button>
+}
 
-          </div>
 
-        </section>
 
+const userRef = doc(
+db,
+"users",
+user.uid
+);
 
 
-        <section className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
 
+const snapshot = await getDoc(userRef);
 
-          {plans.map((plan) => (
 
-            <div
-              key={plan.name}
-              className={`relative rounded-2xl bg-white p-6 shadow-md ${
-                plan.popular
-                  ? "border-4 border-[#FFF700]"
-                  : ""
-              }`}
-            >
 
-              {plan.popular && (
+if(snapshot.exists()){
 
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-[#FFF700] px-4 py-1 text-sm font-bold text-[#0B2E6B]">
-                  ⭐ Most Popular
-                </div>
 
-              )}
+const data = snapshot.data();
 
 
-              <h2 className="text-2xl font-extrabold text-[#0B2E6B]">
-                {plan.name}
-              </h2>
 
+const savedPlan = plans.find(
+(plan)=>plan.name === data.membershipPlan
+);
 
-              {plan.discount && billing === "yearly" && (
 
-                <span className="mt-3 inline-block rounded-full bg-green-100 px-3 py-1 text-sm font-bold text-green-700">
-                  {plan.discount}
-                </span>
 
-              )}
+if(savedPlan){
 
+setCurrentPlan({
+  ...savedPlan,
+  billingCycle:data.billingCycle,
+});
 
-              <p className="mt-5 text-3xl font-extrabold">
-                {billing === "monthly"
-                  ? plan.monthly
-                  : plan.yearly}
-              </p>
+}
 
 
-              <p className="text-sm text-gray-500">
-                {billing === "monthly"
-                  ? "per month"
-                  : "per year"}
-              </p>
+if(data.billingCycle){
 
+setBilling(data.billingCycle);
 
-              <ul className="mt-6 space-y-3 text-sm text-gray-600">
+}
 
-                {plan.features.map((feature) => (
 
-                  <li key={feature}>
-                    ✔ {feature}
-                  </li>
 
-                ))}
+}
 
-              </ul>
 
 
-              <Link
-                href="#"
-                className={`mt-8 block rounded-lg py-3 text-center font-bold ${
-                  plan.name === "Basic"
-                    ? "bg-gray-300 text-gray-700"
-                    : "bg-[#FFF700] text-[#0B2E6B]"
-                }`}
-              >
-                {plan.name === "Basic"
-                  ? "Current Plan"
-                  : `Upgrade to ${plan.name}`}
-              </Link>
+setLoading(false);
 
 
-            </div>
 
-          ))}
+}
 
+);
 
-        </section>
-        <section className="mt-12 grid gap-6 md:grid-cols-2">
 
-          <div className="rounded-2xl bg-white p-6 shadow-md">
 
-            <h2 className="text-2xl font-bold text-[#0B2E6B]">
-              Current Plan
-            </h2>
+return unsubscribe;
 
-            <div className="mt-5 rounded-xl bg-green-50 p-5">
 
-              <h3 className="text-3xl font-extrabold text-green-700">
-                Basic Account
-              </h3>
+},[]);
 
-              <p className="mt-2 text-gray-600">
-                Active membership
-              </p>
 
-            </div>
 
-          </div>
 
 
+const handleUpgrade = async(plan:any)=>{
 
-          <div className="rounded-2xl bg-white p-6 shadow-md">
 
-            <h2 className="text-2xl font-bold text-[#0B2E6B]">
-              Current Usage
-            </h2>
+const user = auth.currentUser;
 
-            <div className="mt-5 space-y-4 text-gray-600">
 
-              <p>
-                🏠 Property Listings: 0 / 5
-              </p>
 
-              <p>
-                🔍 Property Requests: 0 / 5
-              </p>
+if(!user){
 
-              <p>
-                🛋 Interior Projects: 0 / 3
-              </p>
+alert("Please login before upgrading");
 
-            </div>
+return;
 
-          </div>
+}
 
-        </section>
 
 
+await updateUserMembership(
+user.uid,
+{
 
+membershipPlan:plan.name,
 
-        <section className="mt-12 rounded-2xl bg-white p-6 shadow-md md:p-8">
+membershipStatus:"Active",
 
-          <h2 className="text-3xl font-bold text-[#0B2E6B]">
-            Plan Comparison
-          </h2>
+billingCycle:billing,
 
 
-          <div className="mt-6 overflow-x-auto">
+propertyListingLimit:
+billing==="monthly"
+?
+plan.monthlyListings
+:
+plan.yearlyListings,
 
-            <table className="min-w-full border text-sm">
 
-              <thead className="bg-[#0B2E6B] text-white">
+propertyRequestLimit:
+billing==="monthly"
+?
+plan.monthlyRequests
+:
+plan.yearlyRequests,
 
-                <tr>
 
-                  <th className="border p-3 text-left">
-                    Feature
-                  </th>
+interiorRequestLimit:
+billing==="monthly"
+?
+plan.monthlyInterior
+:
+plan.yearlyInterior,
 
-                  <th className="border p-3">
-                    Basic
-                  </th>
+}
 
-                  <th className="border p-3">
-                    Silver
-                  </th>
+);
 
-                  <th className="border p-3">
-                    Gold
-                  </th>
 
-                  <th className="border p-3">
-                    Platinum
-                  </th>
 
-                </tr>
+setCurrentPlan({
+  ...plan,
+  billingCycle:billing,
+});
 
-              </thead>
+setSelectedPlan(plan);
 
+setShowFeedback(true);
 
-              <tbody>
 
-                <tr>
-                  <td className="border p-3">
-                    Property Listings
-                  </td>
+};
+return (
 
-                  <td className="border p-3 text-center">
-                    5
-                  </td>
+<main className="min-h-screen bg-gray-100 py-10 md:py-20">
 
-                  <td className="border p-3 text-center">
-                    60
-                  </td>
+<div className="mx-auto max-w-7xl px-4 md:px-6">
 
-                  <td className="border p-3 text-center">
-                    200
-                  </td>
 
-                  <td className="border p-3 text-center">
-                    Unlimited
-                  </td>
+<BackButton />
 
-                </tr>
 
+<section className="mt-6 rounded-2xl bg-[#0B2E6B] p-8 text-white shadow-md">
 
-                <tr>
-                  <td className="border p-3">
-                    Contact Visibility
-                  </td>
 
-                  <td className="border p-3 text-center">
-                    Limited
-                  </td>
+<h1 className="text-4xl font-extrabold md:text-5xl">
+Nestoria Membership Plans
+</h1>
 
-                  <td className="border p-3 text-center">
-                    Yes
-                  </td>
 
-                  <td className="border p-3 text-center">
-                    Yes
-                  </td>
+<p className="mt-4 max-w-3xl text-blue-100">
+Choose a plan that matches your property goals and unlock
+more opportunities on Nestoria.
+</p>
 
-                  <td className="border p-3 text-center">
-                    Priority
-                  </td>
 
-                </tr>
+</section>
 
 
-                <tr>
-                  <td className="border p-3">
-                    Featured Listings
-                  </td>
 
-                  <td className="border p-3 text-center">
-                    No
-                  </td>
 
-                  <td className="border p-3 text-center">
-                    Optional
-                  </td>
+<section className="mt-8 flex justify-center">
 
-                  <td className="border p-3 text-center">
-                    Included
-                  </td>
 
-                  <td className="border p-3 text-center">
-                    Premium
-                  </td>
+<div className="rounded-full bg-white p-2 shadow-md">
 
-                </tr>
 
+<button
+onClick={()=>setBilling("monthly")}
+className={`rounded-full px-6 py-3 font-bold ${
+billing==="monthly"
+?
+"bg-[#0B2E6B] text-white"
+:
+"text-gray-600"
+}`}
+>
+Monthly
+</button>
 
-              </tbody>
 
-            </table>
 
-          </div>
+<button
+onClick={()=>setBilling("yearly")}
+className={`rounded-full px-6 py-3 font-bold ${
+billing==="yearly"
+?
+"bg-[#0B2E6B] text-white"
+:
+"text-gray-600"
+}`}
+>
+Yearly ⭐ Save More
+</button>
 
 
-        </section>
+</div>
 
 
+</section>
 
 
-        <section className="mt-12 rounded-2xl bg-white p-6 shadow-md md:p-8">
 
-          <h2 className="text-3xl font-bold text-[#0B2E6B]">
-            Frequently Asked Questions
-          </h2>
 
 
-          <div className="mt-6 space-y-5">
+<section className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
 
-            <div>
 
-              <h3 className="font-bold text-[#0B2E6B]">
-                Will every user start with Basic?
-              </h3>
+{
+plans.map((plan)=>(
 
-              <p className="mt-2 text-gray-600">
-                Yes. New users automatically receive a Basic account.
-              </p>
 
-            </div>
+<div
+key={plan.name}
+className={`relative rounded-2xl bg-white p-6 shadow-md ${
+currentPlan.name===plan.name &&
+currentPlan.billingCycle===billing
+?
+"border-4 border-[#FFF700]"
+:
+""
+}`}
+>
 
 
-            <div>
 
-              <h3 className="font-bold text-[#0B2E6B]">
-                Can I upgrade anytime?
-              </h3>
+{
+plan.popular && (
 
-              <p className="mt-2 text-gray-600">
-                Yes. You can upgrade whenever you need more features.
-              </p>
+<div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-[#FFF700] px-4 py-1 text-sm font-bold text-[#0B2E6B]">
 
-            </div>
+⭐ Most Popular
 
+</div>
 
-            <div>
+)
 
-              <h3 className="font-bold text-[#0B2E6B]">
-                How will payment work?
-              </h3>
+}
 
-              <p className="mt-2 text-gray-600">
-                Payment integration will be connected later with a secure
-                payment gateway.
-              </p>
 
-            </div>
 
+<h2 className="text-2xl font-extrabold text-[#0B2E6B]">
 
-          </div>
+{plan.name}
 
+</h2>
 
-        </section>
 
 
+{
+plan.discount && billing==="yearly" && (
 
+<span className="mt-3 inline-block rounded-full bg-green-100 px-3 py-1 text-sm font-bold text-green-700">
 
-        <section className="mt-12 rounded-2xl bg-[#0B2E6B] p-8 text-center text-white">
+{plan.discount}
 
-          <h2 className="text-3xl font-extrabold">
-            Upgrade Your Nestoria Experience
-          </h2>
+</span>
 
-          <p className="mx-auto mt-4 max-w-2xl text-blue-100">
-            Choose a membership plan that helps you reach more customers
-            and manage more property opportunities.
-          </p>
+)
 
+}
 
-          <button
-            className="mt-6 rounded-lg bg-[#FFF700] px-8 py-3 font-bold text-[#0B2E6B]"
-          >
-            Upgrade Account
-          </button>
 
 
-        </section>
+<p className="mt-5 text-3xl font-extrabold">
 
+{
+billing==="monthly"
+?
+plan.monthly
+:
+plan.yearly
+}
 
-      </div>
+</p>
 
-    </main>
 
-  );
+
+<p className="text-sm text-gray-500">
+
+{
+billing==="monthly"
+?
+"per month"
+:
+"per year"
+}
+
+</p>
+
+
+
+
+<ul className="mt-6 space-y-3 text-sm text-gray-600">
+
+
+<li>
+✔ {
+billing==="monthly"
+?
+plan.monthlyListings
+:
+plan.yearlyListings
+}
+ Property Listings
+</li>
+
+
+<li>
+✔ {
+billing==="monthly"
+?
+plan.monthlyRequests
+:
+plan.yearlyRequests
+}
+ Property Requests
+</li>
+
+
+<li>
+✔ {
+billing==="monthly"
+?
+plan.monthlyInterior
+:
+plan.yearlyInterior
+}
+ Interior Requests
+</li>
+
+
+
+{
+plan.features.slice(3).map((feature)=>(
+
+<li key={feature}>
+✔ {feature}
+</li>
+
+))
+
+}
+
+
+
+</ul>
+<button
+
+onClick={()=>{
+
+if(currentPlan.name===plan.name &&
+currentPlan.billingCycle===billing){
+
+return;
+
+}
+
+handleUpgrade(plan);
+
+}}
+
+className={`mt-8 block w-full rounded-lg py-3 text-center font-bold ${
+currentPlan.name===plan.name &&
+currentPlan.billingCycle===billing
+
+?
+
+"bg-green-100 text-green-700"
+
+:
+
+plan.name==="Basic"
+
+?
+
+"bg-gray-300 text-gray-700"
+
+:
+
+"bg-[#FFF700] text-[#0B2E6B]"
+
+}`}
+
+>
+
+
+{
+currentPlan.name===plan.name &&
+currentPlan.billingCycle===billing
+
+?
+
+"Current Plan"
+
+:
+
+plan.name==="Basic"
+
+?
+
+"Free Plan"
+
+:
+
+`Upgrade to ${plan.name}`
+
+}
+
+
+</button>
+
+
+
+</div>
+
+
+))
+
+
+}
+
+
+</section>
+
+
+
+
+
+<section className="mt-12 grid gap-6 md:grid-cols-2">
+
+
+<div className="rounded-2xl bg-white p-6 shadow-md">
+
+
+<h2 className="text-2xl font-bold text-[#0B2E6B]">
+
+Current Plan
+
+</h2>
+
+
+
+<div className="mt-5 rounded-xl bg-green-50 p-5">
+
+
+<h3 className="text-3xl font-extrabold text-green-700">
+
+{currentPlan.name} Account
+
+</h3>
+
+
+
+<p className="mt-2 text-gray-600">
+
+Active membership
+
+</p>
+
+
+
+<p className="mt-2 text-gray-600">
+
+Billing:
+{" "}
+{billing==="monthly" ? "Monthly" : "Yearly"}
+
+</p>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div className="rounded-2xl bg-white p-6 shadow-md">
+
+
+<h2 className="text-2xl font-bold text-[#0B2E6B]">
+
+Current Usage
+
+</h2>
+
+
+
+<div className="mt-5 space-y-4 text-gray-600">
+
+
+<p>
+
+🏠 Property Listings: 0 / {
+
+billing==="monthly"
+
+?
+
+currentPlan.monthlyListings
+
+:
+
+currentPlan.yearlyListings
+
+}
+
+</p>
+
+
+
+<p>
+
+🔍 Property Requests: 0 / {
+
+billing==="monthly"
+
+?
+
+currentPlan.monthlyRequests
+
+:
+
+currentPlan.yearlyRequests
+
+}
+
+</p>
+
+
+
+<p>
+
+🛋 Interior Projects: 0 / {
+
+billing==="monthly"
+
+?
+
+currentPlan.monthlyInterior
+
+:
+
+currentPlan.yearlyInterior
+
+}
+
+</p>
+
+
+</div>
+
+
+</div>
+
+
+</section>
+<section className="mt-12 rounded-2xl bg-white p-6 shadow-md md:p-8">
+
+
+<h2 className="text-3xl font-bold text-[#0B2E6B]">
+Plan Comparison
+</h2>
+
+
+
+<div className="mt-6 overflow-x-auto">
+
+
+<table className="min-w-full border text-sm">
+
+
+<thead className="bg-[#0B2E6B] text-white">
+
+
+<tr>
+
+<th className="border p-3 text-left">
+Feature
+</th>
+
+
+<th className="border p-3">
+Basic
+</th>
+
+
+<th className="border p-3">
+Silver
+</th>
+
+
+<th className="border p-3">
+Gold
+</th>
+
+
+<th className="border p-3">
+Platinum
+</th>
+
+
+</tr>
+
+
+</thead>
+
+
+
+
+<tbody>
+
+
+<tr>
+
+<td className="border p-3">
+Property Listings
+</td>
+
+
+<td className="border p-3 text-center">
+{
+billing==="monthly"
+?
+plans[0].monthlyListings
+:
+plans[0].yearlyListings
+}
+</td>
+
+
+<td className="border p-3 text-center">
+{
+billing==="monthly"
+?
+plans[1].monthlyListings
+:
+plans[1].yearlyListings
+}
+</td>
+
+
+<td className="border p-3 text-center">
+{
+billing==="monthly"
+?
+plans[2].monthlyListings
+:
+plans[2].yearlyListings
+}
+</td>
+
+
+<td className="border p-3 text-center">
+Unlimited
+</td>
+
+
+</tr>
+
+
+
+
+<tr>
+
+<td className="border p-3">
+Contact Visibility
+</td>
+
+
+<td className="border p-3 text-center">
+Limited
+</td>
+
+
+<td className="border p-3 text-center">
+Yes
+</td>
+
+
+<td className="border p-3 text-center">
+Yes
+</td>
+
+
+<td className="border p-3 text-center">
+Priority
+</td>
+
+
+</tr>
+
+
+
+
+
+<tr>
+
+<td className="border p-3">
+Featured Listings
+</td>
+
+
+<td className="border p-3 text-center">
+No
+</td>
+
+
+<td className="border p-3 text-center">
+Optional
+</td>
+
+
+<td className="border p-3 text-center">
+Included
+</td>
+
+
+<td className="border p-3 text-center">
+Premium
+</td>
+
+
+</tr>
+
+
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+<section className="mt-12 rounded-2xl bg-white p-6 shadow-md md:p-8">
+
+
+<h2 className="text-3xl font-bold text-[#0B2E6B]">
+
+Frequently Asked Questions
+
+</h2>
+
+
+
+<div className="mt-6 space-y-5">
+
+
+<div>
+
+<h3 className="font-bold text-[#0B2E6B]">
+
+Will every user start with Basic?
+
+</h3>
+
+
+<p className="mt-2 text-gray-600">
+
+Yes. New users automatically receive a Basic account.
+
+</p>
+
+
+</div>
+
+
+
+<div>
+
+<h3 className="font-bold text-[#0B2E6B]">
+
+Can I upgrade anytime?
+
+</h3>
+
+
+<p className="mt-2 text-gray-600">
+
+Yes. You can upgrade whenever you need more features.
+
+</p>
+
+
+</div>
+
+
+
+<div>
+
+<h3 className="font-bold text-[#0B2E6B]">
+
+How will payment work?
+
+</h3>
+
+
+<p className="mt-2 text-gray-600">
+
+Payment integration will be connected later with a secure payment gateway.
+
+</p>
+
+
+</div>
+
+
+</div>
+
+
+</section>
+<section className="mt-12 rounded-2xl bg-[#0B2E6B] p-8 text-center text-white">
+
+
+<h2 className="text-3xl font-extrabold">
+
+Upgrade Your Nestoria Experience
+
+</h2>
+
+
+
+<p className="mx-auto mt-4 max-w-2xl text-blue-100">
+
+Choose a membership plan that helps you reach more customers
+and manage more property opportunities.
+
+</p>
+
+
+
+<button
+
+onClick={()=>handleUpgrade(plans[1])}
+
+className="mt-6 rounded-lg bg-[#FFF700] px-8 py-3 font-bold text-[#0B2E6B]"
+
+>
+
+Upgrade Account
+
+</button>
+
+
+
+</section>
+
+
+
+
+
+{
+showFeedback && selectedPlan && (
+
+<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+
+
+<div className="w-full max-w-md rounded-2xl bg-white p-8 text-center shadow-xl">
+
+
+<div className="text-5xl">
+✅
+</div>
+
+
+
+<h2 className="mt-4 text-2xl font-extrabold text-[#0B2E6B]">
+
+Upgrade Successful
+
+</h2>
+
+
+
+<p className="mt-3 text-gray-600">
+
+Your Nestoria membership has been updated.
+
+</p>
+
+
+
+
+<div className="mt-5 rounded-xl bg-gray-100 p-4 text-left">
+
+
+<p className="font-bold text-[#0B2E6B]">
+
+Plan: {selectedPlan.name}
+
+</p>
+
+
+
+<p className="mt-2">
+
+Billing:
+{" "}
+{billing==="monthly" ? "Monthly" : "Yearly"}
+
+</p>
+
+
+
+<p className="mt-2">
+
+Price:
+{" "}
+{
+billing==="monthly"
+?
+selectedPlan.monthly
+:
+selectedPlan.yearly
+}
+
+</p>
+
+
+</div>
+
+
+
+
+
+<button
+
+onClick={()=>{
+
+setShowFeedback(false);
+
+setSelectedPlan(null);
+
+}}
+
+className="mt-6 w-full rounded-lg bg-[#0B2E6B] px-6 py-3 font-bold text-white"
+
+>
+
+OK
+
+</button>
+
+
+
+</div>
+
+
+</div>
+
+)
+
+}
+
+
+
+</div>
+
+
+</main>
+
+
+);
+
 
 }

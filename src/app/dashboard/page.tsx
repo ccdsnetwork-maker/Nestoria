@@ -9,7 +9,6 @@ import auth from "@/lib/auth";
 import { db } from "@/lib/firebase";
 import BackButton from "@/components/layout/BackButton";
 
-
 const sections = [
   { id: "properties", title: "My Properties", icon: "🏠" },
   { id: "requests", title: "My Requests", icon: "🔍" },
@@ -18,7 +17,6 @@ const sections = [
   { id: "messages", title: "Messages", icon: "💬" },
   { id: "settings", title: "Settings", icon: "⚙️" },
 ];
-
 
 const properties = [
   {
@@ -29,7 +27,6 @@ const properties = [
   },
 ];
 
-
 const requests = [
   {
     name: "3 Bedroom Apartment",
@@ -39,7 +36,6 @@ const requests = [
   },
 ];
 
-
 const interiors = [
   {
     name: "Living Room Renovation",
@@ -47,7 +43,6 @@ const interiors = [
     status: "Quote Sent",
   },
 ];
-
 
 const saved = [
   {
@@ -57,33 +52,34 @@ const saved = [
   },
 ];
 
-
 const messages = [
   {
-    id:"support",
-    sender:"Nestoria Support",
-    message:"Welcome to Nestoria",
-    date:"Today",
+    id: "support",
+    sender: "Nestoria Support",
+    message: "Welcome to Nestoria",
+    date: "Today",
   },
 ];
 
-
 export default function Dashboard(){
 
-
 const [active,setActive]=useState("properties");
-
 
 const [profile,setProfile]=useState({
   fullName:"User Name",
   email:"user@email.com",
   phone:"",
+  location:"",
   photoURL:"",
+  membershipPlan:"Basic",
+  membershipStatus:"Active",
+  billingCycle:"Monthly",
+  propertyListingLimit:5,
+  propertyRequestLimit:5,
+  interiorRequestLimit:3,
 });
 
-
 const contentRef = useRef<HTMLDivElement | null>(null);
-
 
 
 useEffect(()=>{
@@ -94,16 +90,13 @@ async(user)=>{
 
 if(!user) return;
 
-
 let userData:any={
-
-fullName:user.displayName || "Nestoria User",
-email:user.email || "",
-phone:"",
-photoURL:user.photoURL || "",
-
+  fullName:user.displayName || "Nestoria User",
+  email:user.email || "",
+  phone:"",
+  location:"",
+  photoURL:user.photoURL || "",
 };
-
 
 
 const userRef=doc(
@@ -113,38 +106,29 @@ user.uid
 );
 
 
-
 const snapshot=await getDoc(userRef);
-
 
 
 if(snapshot.exists()){
 
 userData={
-...userData,
-...snapshot.data(),
+ ...userData,
+ ...snapshot.data(),
 };
 
 }
 
 
-
 setProfile(userData);
 
 
-}
-
-);
-
+});
 
 
 return unsubscribe;
 
 
 },[]);
-
-
-
 useEffect(()=>{
 
 if(window.innerWidth < 768){
@@ -161,10 +145,11 @@ block:"start",
 }
 
 },[active]);
+
+
 return (
 
 <main className="min-h-screen bg-gray-100 py-10 md:py-20">
-
 
 <div className="mx-auto max-w-6xl px-4 md:px-6">
 
@@ -178,14 +163,11 @@ return (
 Welcome Back To Nestoria
 </h1>
 
-
 <p className="mt-3 text-blue-100">
 Manage your properties, requests, interior projects and account.
 </p>
 
-
 </section>
-
 
 
 
@@ -200,6 +182,7 @@ className="mt-8 rounded-2xl bg-white p-6 shadow-md"
 
 <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full bg-gray-200 text-5xl">
 
+
 {
 profile.photoURL
 ?
@@ -212,8 +195,8 @@ className="h-full w-full object-cover"
 "👤"
 }
 
-</div>
 
+</div>
 
 
 
@@ -231,12 +214,12 @@ className="h-full w-full object-cover"
 
 
 <p className="text-gray-600">
-{profile.phone || "No phone number added"}
+{profile.phone}
 </p>
 
 
 <p className="text-gray-600">
-Lagos, Nigeria
+{profile.location}
 </p>
 
 
@@ -248,16 +231,16 @@ Lagos, Nigeria
 href="/profile"
 className="md:ml-auto rounded-lg bg-[#FFF700] px-6 py-3 text-center font-bold text-[#0B2E6B]"
 >
-Edit Profile
-</Link>
 
+Edit Profile
+
+</Link>
 
 
 </div>
 
 
 </section>
-
 
 
 
@@ -270,7 +253,6 @@ Edit Profile
 
 <div>
 
-
 <h2 className="text-2xl font-bold text-[#0B2E6B]">
 Membership Status
 </h2>
@@ -282,19 +264,29 @@ Your current Nestoria account plan
 
 
 <div className="mt-3 inline-block rounded-full bg-blue-100 px-4 py-2 font-bold text-[#0B2E6B]">
-🟦 Basic Member
+
+🟦 {profile.membershipPlan} Member
+
 </div>
 
+<p className="mt-2 text-sm text-gray-600">
+Status: {profile.membershipStatus}
+</p>
+
+<p className="mt-1 text-sm text-gray-600">
+Billing: {profile.billingCycle}
+</p>
 
 </div>
-
 
 
 <Link
 href="/membership"
 className="rounded-lg bg-[#FFF700] px-6 py-3 text-center font-bold text-[#0B2E6B]"
 >
+
 Upgrade Account
+
 </Link>
 
 
@@ -305,22 +297,20 @@ Upgrade Account
 
 
 
-
-
 <section className="mt-8 rounded-2xl bg-white p-6 shadow-md">
 
 
 <h2 className="text-2xl font-bold text-[#0B2E6B]">
+
 Dashboard Menu
+
 </h2>
 
 
 <div className="mt-5 grid gap-4 md:grid-cols-3">
 
-
 {
 sections.map((section)=>(
-
 
 <button
 key={section.id}
@@ -332,8 +322,8 @@ active===section.id
 :
 "bg-gray-100"
 }`}
->
 
+>
 
 <div className="text-3xl">
 {section.icon}
@@ -347,8 +337,8 @@ active===section.id
 
 </button>
 
-
 ))
+
 }
 
 
@@ -402,14 +392,13 @@ Views: {item.views}
 </div>
 
 ))
+
 }
 
 
 </div>
 
 )}
-
-
 
 
 
@@ -429,6 +418,7 @@ requests.map((item)=>(
 key={item.name}
 className="mt-5 rounded-lg border p-4"
 >
+
 
 <p className="font-bold">
 {item.name}
@@ -453,6 +443,7 @@ Status: {item.status}
 </div>
 
 ))
+
 }
 
 
@@ -463,14 +454,15 @@ Status: {item.status}
 
 
 
-
 {active==="interiors" && (
 
 <div>
 
+
 <h2 className="text-2xl font-bold text-[#0B2E6B]">
 🛋 Interior Projects
 </h2>
+
 
 
 {
@@ -480,6 +472,7 @@ interiors.map((item)=>(
 key={item.name}
 className="mt-5 rounded-lg border p-4"
 >
+
 
 <p className="font-bold">
 {item.name}
@@ -499,6 +492,7 @@ Status: {item.status}
 </div>
 
 ))
+
 }
 
 
@@ -510,9 +504,11 @@ Status: {item.status}
 
 
 
+
 {active==="saved" && (
 
 <div>
+
 
 <h2 className="text-2xl font-bold text-[#0B2E6B]">
 ❤️ Saved Properties
@@ -526,6 +522,7 @@ saved.map((item)=>(
 key={item.name}
 className="mt-5 rounded-lg border p-4"
 >
+
 
 <p className="font-bold">
 {item.name}
@@ -545,6 +542,7 @@ className="mt-5 rounded-lg border p-4"
 </div>
 
 ))
+
 }
 
 
@@ -554,6 +552,7 @@ className="mt-5 rounded-lg border p-4"
 {active==="messages" && (
 
 <div>
+
 
 <h2 className="text-2xl font-bold text-[#0B2E6B]">
 💬 Messages
@@ -584,17 +583,21 @@ className="mt-5 rounded-lg border p-4"
 </p>
 
 
+
 <Link
 href={`/chat/${item.id}`}
 className="mt-4 inline-block rounded-lg bg-[#0B2E6B] px-5 py-2 font-bold text-white"
 >
+
 Reply
+
 </Link>
 
 
 </div>
 
 ))
+
 }
 
 
@@ -624,7 +627,9 @@ Reply
 href="/change-password"
 className="block rounded-lg border p-4"
 >
+
 🔐 Change Password
+
 </Link>
 
 
@@ -632,12 +637,13 @@ className="block rounded-lg border p-4"
 <button
 className="w-full rounded-lg border p-4 text-left text-red-600"
 >
+
 🗑 Delete Account
+
 </button>
 
 
 </div>
-
 
 
 
@@ -647,6 +653,7 @@ className="w-full rounded-lg border p-4 text-left text-red-600"
 <h3 className="font-bold text-[#0B2E6B]">
 Profile Settings
 </h3>
+
 
 
 <p className="mt-2 text-gray-600">
@@ -660,12 +667,14 @@ phone number and location from your profile page.
 href="/profile"
 className="mt-4 inline-block rounded-lg bg-[#0B2E6B] px-5 py-2 font-bold text-white"
 >
+
 Open Profile Settings
+
 </Link>
 
 
-
 </div>
+
 
 
 </div>
@@ -673,7 +682,9 @@ Open Profile Settings
 )}
 
 
+
 </section>
+
 
 
 </div>
@@ -681,6 +692,8 @@ Open Profile Settings
 
 </main>
 
+
 );
+
 
 }

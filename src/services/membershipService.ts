@@ -6,6 +6,7 @@ import {
   deleteDoc,
   doc,
   serverTimestamp,
+  setDoc,
 } from "firebase/firestore";
 
 import { db } from "@/lib/firebase";
@@ -13,21 +14,21 @@ import { db } from "@/lib/firebase";
 
 export type MembershipPlan = {
 
-id?:string;
+  id?: string;
 
-name:string;
+  name: string;
 
-price:string;
+  price: string;
 
-subscribers:number;
+  subscribers: number;
 
-listings:string;
+  listings: string;
 
-status:string;
+  status: string;
 
-discount?:string;
+  discount?: string;
 
-createdAt?:any;
+  createdAt?: any;
 
 };
 
@@ -38,20 +39,19 @@ collection(db,"membershipPlans");
 
 
 
-
 export async function getPlans(){
 
-const snapshot =
-await getDocs(membershipCollection);
+  const snapshot =
+  await getDocs(membershipCollection);
 
 
-return snapshot.docs.map((item)=>({
+  return snapshot.docs.map((item)=>({
 
-id:item.id,
+    id:item.id,
 
-...item.data(),
+    ...item.data(),
 
-})) as MembershipPlan[];
+  })) as MembershipPlan[];
 
 }
 
@@ -60,20 +60,20 @@ id:item.id,
 
 
 export async function addPlan(
-plan:MembershipPlan
+  plan:MembershipPlan
 ){
 
-const docRef =
-await addDoc(
-membershipCollection,
-{
-...plan,
-createdAt:serverTimestamp(),
-}
-);
+  const docRef =
+  await addDoc(
+    membershipCollection,
+    {
+      ...plan,
+      createdAt:serverTimestamp(),
+    }
+  );
 
 
-return docRef.id;
+  return docRef.id;
 
 }
 
@@ -82,14 +82,14 @@ return docRef.id;
 
 
 export async function updatePlan(
-id:string,
-data:Partial<MembershipPlan>
+  id:string,
+  data:Partial<MembershipPlan>
 ){
 
-await updateDoc(
-doc(db,"membershipPlans",id),
-data
-);
+  await updateDoc(
+    doc(db,"membershipPlans",id),
+    data
+  );
 
 }
 
@@ -98,12 +98,12 @@ data
 
 
 export async function deletePlan(
-id:string
+  id:string
 ){
 
-await deleteDoc(
-doc(db,"membershipPlans",id)
-);
+  await deleteDoc(
+    doc(db,"membershipPlans",id)
+  );
 
 }
 
@@ -112,20 +112,49 @@ doc(db,"membershipPlans",id)
 
 
 export async function togglePlanStatus(
-id:string,
-status:string
+  id:string,
+  status:string
 ){
 
-await updateDoc(
-doc(db,"membershipPlans",id),
-{
-status:
-status==="Active"
-?
-"Inactive"
-:
-"Active"
+  await updateDoc(
+    doc(db,"membershipPlans",id),
+    {
+      status:
+      status==="Active"
+      ?
+      "Inactive"
+      :
+      "Active"
+    }
+  );
+
 }
-);
+
+
+
+
+
+export async function updateUserMembership(
+  uid:string,
+  membership:any
+){
+
+  const userRef = doc(
+    db,
+    "users",
+    uid
+  );
+
+
+  await setDoc(
+    userRef,
+    {
+      ...membership,
+      membershipUpdatedAt:serverTimestamp(),
+    },
+    {
+      merge:true
+    }
+  );
 
 }
