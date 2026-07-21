@@ -18,7 +18,7 @@ export default async function PropertyDetails({ params }: PageProps) {
   const { id } = await params;
 
   const property = featuredProperties.find(
-    (item) => item.id === Number(id)
+    (item) => item.id === id
   );
 
 

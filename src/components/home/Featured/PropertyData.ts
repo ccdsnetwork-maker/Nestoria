@@ -1,28 +1,29 @@
 export interface Property {
-  id: number;
+  id?: string;
   title: string;
+  description?: string;
   location: string;
   price: string;
   image: string;
-
+  images?: string[];
   type: string;
-
+  category?: string;
   featured: boolean;
   verified: boolean;
-
   beds: number;
   baths: number;
   parking: number;
   area: string;
-
   features: string[];
-
   agent: string;
+  agentId?: string;
+  ownerId?: string;
+  status?: string;
+  createdAt?: any;
 }
-
 export const featuredProperties: Property[] = [
   {
-    id: 1,
+    id: "1",
     title: "Modern 4-Bedroom Detached Duplex",
     location: "Oluyole Estate, Ibadan",
     price: "₦85,000,000",
@@ -38,7 +39,7 @@ export const featuredProperties: Property[] = [
     agent: "John Adeyemi",
   },
   {
-    id: 2,
+    id: "2",
     title: "Luxury Smart Apartment",
     location: "Lekki Phase 1, Lagos",
     price: "₦120,000,000",
@@ -54,7 +55,7 @@ export const featuredProperties: Property[] = [
     agent: "Mary Johnson",
   },
   {
-    id: 3,
+    id: "3",
     title: "Executive Short-let Apartment",
     location: "Victoria Island, Lagos",
     price: "₦250,000 / Night",
@@ -70,7 +71,7 @@ export const featuredProperties: Property[] = [
     agent: "David Williams",
   },
   {
-    id: 4,
+    id: "4",
     title: "Contemporary Terrace Duplex",
     location: "Ajah, Lagos",
     price: "₦68,500,000",
@@ -86,7 +87,7 @@ export const featuredProperties: Property[] = [
     agent: "Grace Adebayo",
   },
   {
-    id: 5,
+    id: "5",
     title: "Serviced 3-Bedroom Apartment",
     location: "Wuse 2, Abuja",
     price: "₦7,500,000 / Year",
@@ -102,7 +103,7 @@ export const featuredProperties: Property[] = [
     agent: "Samuel Peters",
   },
   {
-    id: 6,
+    id: "6",
     title: "Prime Commercial Office",
     location: "Ikeja, Lagos",
     price: "₦250,000,000",
@@ -118,7 +119,7 @@ export const featuredProperties: Property[] = [
     agent: "Ruth Okafor",
   },
   {
-    id: 7,
+    id: "7",
     title: "Residential Land",
     location: "Moniya, Ibadan",
     price: "₦12,000,000",
@@ -134,7 +135,7 @@ export const featuredProperties: Property[] = [
     agent: "Michael Bello",
   },
   {
-    id: 8,
+    id: "8",
     title: "Luxury Penthouse",
     location: "Banana Island, Lagos",
     price: "₦650,000,000",
@@ -150,7 +151,7 @@ export const featuredProperties: Property[] = [
     agent: "Jennifer Cole",
   },
   {
-    id: 9,
+    id: "9",
     title: "Family Bungalow",
     location: "Akure, Ondo",
     price: "₦38,000,000",
@@ -166,7 +167,7 @@ export const featuredProperties: Property[] = [
     agent: "Ayo Akin",
   },
   {
-    id: 10,
+    id: "10",
     title: "Executive Duplex",
     location: "Abeokuta, Ogun",
     price: "₦74,000,000",
@@ -182,7 +183,7 @@ export const featuredProperties: Property[] = [
     agent: "Tosin Adeoye",
   },
   {
-    id: 11,
+    id: "11",
     title: "Waterfront Apartment",
     location: "Ikoyi, Lagos",
     price: "₦18,000,000 / Year",
@@ -198,7 +199,7 @@ export const featuredProperties: Property[] = [
     agent: "Chidinma Obi",
   },
   {
-    id: 12,
+    id: "12",
     title: "Modern Studio Apartment",
     location: "Gwarinpa, Abuja",
     price: "₦3,200,000 / Year",
