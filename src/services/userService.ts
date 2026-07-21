@@ -10,7 +10,16 @@ import {
 } from "firebase/firestore";
 
 import { db } from "@/lib/firebase";
-
+export type User = {
+  id?: string;
+  fullName?: string;
+  email?: string;
+  phone?: string;
+  role?: string;
+  accountStatus?: string;
+  membershipPlan?: string;
+  createdAt?: any;
+};
 
 export async function createUserProfile(
   uid:string,
