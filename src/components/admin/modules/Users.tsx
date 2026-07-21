@@ -93,17 +93,15 @@ loadUsers();
 
 
 
-const filteredUsers=users.filter(user=>
-
-user.name?.toLowerCase()
-.includes(search.toLowerCase())
-
-||
-user.email?.toLowerCase()
-.includes(search.toLowerCase())
-
+const filteredUsers = users.filter(
+  (user) =>
+    (user.fullName ?? "")
+      .toLowerCase()
+      .includes(search.toLowerCase()) ||
+    (user.email ?? "")
+      .toLowerCase()
+      .includes(search.toLowerCase())
 );
-
 
 
 
@@ -256,8 +254,7 @@ className="border-b"
 
 <td className="p-4 font-bold text-[#0B2E6B]">
 
-{user.name}
-
+{user.fullName || "No Name"}
 </td>
 
 
