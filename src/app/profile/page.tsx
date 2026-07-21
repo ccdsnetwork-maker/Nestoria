@@ -9,6 +9,7 @@ import auth from "@/lib/auth";
 import {
   getUserProfile,
   updateUserProfile,
+  User,
 } from "@/services/userService";
 
 import {
@@ -76,66 +77,52 @@ export default function Profile(){
             user.uid
           );
 
-
+const typedProfile = profile as User | null;
 
           setForm({
+  fullName:
+    typedProfile?.fullName || user.displayName || "",
 
-            fullName:
-              profile?.fullName || user.displayName || "",
+  email:
+    user.email || "",
 
+  phone:
+    typedProfile?.phone || "",
 
-            email:
-              user.email || "",
+  location:
+    typedProfile?.location || "",
 
+  gender:
+    typedProfile?.gender || "",
 
-            phone:
-              profile?.phone || "",
+  dateOfBirth:
+    typedProfile?.dateOfBirth || "",
 
+  address:
+    typedProfile?.address || "",
 
-            location:
-              profile?.location || "",
+  city:
+    typedProfile?.city || "",
 
+  state:
+    typedProfile?.state || "",
 
-            gender:
-              profile?.gender || "",
+  country:
+    typedProfile?.country || "",
 
+  occupation:
+    typedProfile?.occupation || "",
 
-            dateOfBirth:
-              profile?.dateOfBirth || "",
+  company:
+    typedProfile?.company || "",
 
+  bio:
+    typedProfile?.bio || "",
 
-            address:
-              profile?.address || "",
+  photoURL:
+    typedProfile?.photoURL || user.photoURL || "",
+});      
 
-
-            city:
-              profile?.city || "",
-
-
-            state:
-              profile?.state || "",
-
-
-            country:
-              profile?.country || "",
-
-
-            occupation:
-              profile?.occupation || "",
-
-
-            company:
-              profile?.company || "",
-
-
-            bio:
-              profile?.bio || "",
-
-
-            photoURL:
-              profile?.photoURL || user.photoURL || "",
-
-          });
 
 
         }
