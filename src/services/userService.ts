@@ -1,7 +1,11 @@
 import {
+  collection,
   doc,
   setDoc,
   getDoc,
+  getDocs,
+  updateDoc,
+  deleteDoc,
   serverTimestamp,
 } from "firebase/firestore";
 
@@ -27,12 +31,11 @@ export async function createUserProfile(
   );
 
 }
-
-
-
 export async function getUserProfile(
   uid:string
-){
+): Promise<any>
+
+{
 
   const snapshot = await getDoc(
     doc(db,"users",uid)
@@ -48,11 +51,9 @@ export async function getUserProfile(
 
   }
 
-
   return null;
 
 }
-
 
 
 
@@ -70,6 +71,56 @@ export async function updateUserProfile(
     {
       merge:true,
     }
+  );
+
+}
+
+
+
+// ADMIN USERS MODULE FUNCTIONS
+
+
+export async function getUsers(){
+
+  const snapshot = await getDocs(
+    collection(db,"users")
+  );
+
+
+  return snapshot.docs.map((item)=>({
+    id:item.id,
+    ...item.data(),
+  }));
+
+}
+
+
+
+export async function toggleUserStatus(
+  id:string,
+  status:string
+){
+
+  await updateDoc(
+    doc(db,"users",id),
+    {
+      accountStatus:
+        status==="active"
+        ? "inactive"
+        : "active",
+    }
+  );
+
+}
+
+
+
+export async function deleteUser(
+  id:string
+){
+
+  await deleteDoc(
+    doc(db,"users",id)
   );
 
 }
