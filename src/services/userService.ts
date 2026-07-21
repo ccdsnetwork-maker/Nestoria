@@ -16,6 +16,18 @@ export type User = {
   id: string;
   fullName?: string;
   email?: string;
+  phone?: string;
+  location?: string;
+  gender?: string;
+  dateOfBirth?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  occupation?: string;
+  company?: string;
+  bio?: string;
+  photoURL?: string;
   role?: string;
   accountStatus?: string;
   createdAt?: any;
@@ -24,19 +36,19 @@ export type User = {
 
 // Create user profile
 export async function createUserProfile(
-  uid:string,
-  data:any
-){
+  uid: string,
+  data: any
+) {
   await setDoc(
-    doc(db,"users",uid),
+    doc(db, "users", uid),
     {
       ...data,
-      role:"customer",
-      accountStatus:"active",
-      createdAt:serverTimestamp(),
+      role: "customer",
+      accountStatus: "active",
+      createdAt: serverTimestamp(),
     },
     {
-      merge:true,
+      merge: true,
     }
   );
 }
@@ -44,17 +56,18 @@ export async function createUserProfile(
 
 // Get single user profile
 export async function getUserProfile(
-  uid:string
-){
+  uid: string
+): Promise<User | null> {
+
   const snapshot = await getDoc(
-    doc(db,"users",uid)
+    doc(db, "users", uid)
   );
 
-  if(snapshot.exists()){
+  if (snapshot.exists()) {
     return {
-      id:snapshot.id,
+      id: snapshot.id,
       ...snapshot.data(),
-    };
+    } as User;
   }
 
   return null;
@@ -63,31 +76,31 @@ export async function getUserProfile(
 
 // Update user profile
 export async function updateUserProfile(
-  uid:string,
-  data:any
-){
+  uid: string,
+  data: any
+) {
   await setDoc(
-    doc(db,"users",uid),
+    doc(db, "users", uid),
     {
       ...data,
-      updatedAt:serverTimestamp(),
+      updatedAt: serverTimestamp(),
     },
     {
-      merge:true,
+      merge: true,
     }
   );
 }
 
 
 // Admin: get all users
-export async function getUsers(){
+export async function getUsers(): Promise<User[]> {
 
   const snapshot = await getDocs(
-    collection(db,"users")
+    collection(db, "users")
   );
 
-  return snapshot.docs.map((item)=>({
-    id:item.id,
+  return snapshot.docs.map((item) => ({
+    id: item.id,
     ...item.data(),
   })) as User[];
 
@@ -96,15 +109,15 @@ export async function getUsers(){
 
 // Admin: toggle user status
 export async function toggleUserStatus(
-  id:string,
-  status:string
-){
+  id: string,
+  status: string
+) {
 
   await updateDoc(
-    doc(db,"users",id),
+    doc(db, "users", id),
     {
-      accountStatus:status,
-      updatedAt:serverTimestamp(),
+      accountStatus: status,
+      updatedAt: serverTimestamp(),
     }
   );
 
@@ -113,11 +126,11 @@ export async function toggleUserStatus(
 
 // Admin: delete user
 export async function deleteUser(
-  id:string
-){
+  id: string
+) {
 
   await deleteDoc(
-    doc(db,"users",id)
+    doc(db, "users", id)
   );
 
 }
