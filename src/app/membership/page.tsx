@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+
 import BackButton from "@/components/layout/BackButton";
 import { plans } from "@/config/membershipPlans";
 
@@ -30,6 +32,7 @@ const [selectedPlan,setSelectedPlan] = useState<any>(null);
 
 
 const [showFeedback,setShowFeedback] = useState(false);
+const [pendingRequest,setPendingRequest] = useState<any>(null);
 
 
 const [loading,setLoading] = useState(true);
@@ -66,40 +69,34 @@ const snapshot = await getDoc(userRef);
 
 
 
-if(snapshot.exists()){
 
+if (snapshot.exists()) {
+  const data = snapshot.data();
 
-const data = snapshot.data();
+  const activeBilling =
+    data.billingCycle === "yearly"
+      ? "yearly"
+      : "monthly";
 
+  setBilling(activeBilling);
 
+  const activePlan =
+    plans.find(
+      (plan) => plan.name === data.membershipPlan
+    ) || plans[0];
 
-const savedPlan = plans.find(
-(plan)=>plan.name === data.membershipPlan
-);
+  setCurrentPlan({
+    ...activePlan,
+    billingCycle: activeBilling,
+  });
+} else {
+  setBilling("monthly");
 
-
-
-if(savedPlan){
-
-setCurrentPlan({
-  ...savedPlan,
-  billingCycle:data.billingCycle,
-});
-
+  setCurrentPlan({
+    ...plans[0],
+    billingCycle: "monthly",
+  });
 }
-
-
-if(data.billingCycle){
-
-setBilling(data.billingCycle);
-
-}
-
-
-
-}
-
-
 
 setLoading(false);
 
@@ -122,10 +119,7 @@ return unsubscribe;
 
 const handleUpgrade = async(plan:any)=>{
 
-
 const user = auth.currentUser;
-
-
 
 if(!user){
 
@@ -136,17 +130,24 @@ return;
 }
 
 
-
-await updateUserMembership(
-user.uid,
+await addDoc(
+collection(db,"membershipRequests"),
 {
 
-membershipPlan:plan.name,
+userId:user.uid,
 
-membershipStatus:"Active",
+userName:
+user.displayName || "Nestoria User",
 
-billingCycle:billing,
+email:
+user.email || "",
 
+plan:plan.name,
+
+billingCycle:
+billing==="monthly"
+? "Monthly"
+: "Yearly",
 
 propertyListingLimit:
 billing==="monthly"
@@ -155,14 +156,12 @@ plan.monthlyListings
 :
 plan.yearlyListings,
 
-
 propertyRequestLimit:
 billing==="monthly"
 ?
 plan.monthlyRequests
 :
 plan.yearlyRequests,
-
 
 interiorRequestLimit:
 billing==="monthly"
@@ -171,18 +170,19 @@ plan.monthlyInterior
 :
 plan.yearlyInterior,
 
-}
+status:"Pending",
 
+createdAt:serverTimestamp(),
+
+}
 );
 
 
-
-setCurrentPlan({
-  ...plan,
-  billingCycle:billing,
-});
-
 setSelectedPlan(plan);
+setPendingRequest({
+  name: plan.name,
+  billingCycle: billing,
+});
 
 setShowFeedback(true);
 
@@ -452,15 +452,15 @@ currentPlan.billingCycle===billing
 "Current Plan"
 
 :
-
 plan.name==="Basic"
-
 ?
-
 "Free Plan"
-
 :
-
+pendingRequest?.name === plan.name &&
+pendingRequest?.billingCycle === billing
+?
+"Waiting for Approval"
+:
 `Upgrade to ${plan.name}`
 
 }
@@ -923,19 +923,14 @@ showFeedback && selectedPlan && (
 </div>
 
 
-
 <h2 className="mt-4 text-2xl font-extrabold text-[#0B2E6B]">
-
-Upgrade Successful
-
+Request Submitted
 </h2>
-
 
 
 <p className="mt-3 text-gray-600">
 
-Your Nestoria membership has been updated.
-
+Your upgrade request has been submitted. Please wait for admin approval before your membership is activated.
 </p>
 
 
