@@ -135,8 +135,6 @@ export default function Users() {
           </thead>
 
 
-cat >> src/components/admin/modules/Users.tsx <<'EOF'
-
           <tbody>
 
             {loading && (
