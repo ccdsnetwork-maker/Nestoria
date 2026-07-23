@@ -16,7 +16,6 @@ export default function Navbar() {
 
   const [loggedIn, setLoggedIn] = useState(false);
 
-
   useEffect(() => {
 
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -28,15 +27,12 @@ export default function Navbar() {
   }, []);
 
 
-
   async function logout() {
 
     await signOut(auth);
-
     router.push("/");
 
   }
-
 
 
   const links = loggedIn
@@ -57,7 +53,6 @@ export default function Navbar() {
       ];
 
 
-
   return (
 
     <nav className="sticky top-0 z-50 bg-[#0B2E6B] shadow-lg">
@@ -65,7 +60,8 @@ export default function Navbar() {
       <div className="relative mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
 
 
-        <Link href="/" className="flex items-center gap-3">
+        <Link href="/" className="flex items-center gap-1">
+
 
           <Image
             src="/images/nestoria-logo.png"
@@ -73,6 +69,7 @@ export default function Navbar() {
             width={55}
             height={55}
             priority
+            className="scale-280"
           />
 
 
@@ -82,11 +79,13 @@ export default function Navbar() {
               Nestoria
             </span>
 
+
             <span className="text-xs font-bold tracking-wide text-[#FFF700]">
               INTERIORS & PROPERTIES
             </span>
 
           </div>
+
 
         </Link>
 
@@ -122,19 +121,27 @@ export default function Navbar() {
                 onClick={logout}
                 className="rounded-lg bg-red-600 px-5 py-2 font-semibold text-white"
               >
+
                 Logout
+
               </button>
 
+
             ) : (
+
 
               <Link
                 href="/register"
                 className="rounded-lg bg-[#FFF700] px-5 py-2 font-semibold text-[#0B2E6B]"
               >
+
                 Register
+
               </Link>
 
+
             )
+
           }
 
 
