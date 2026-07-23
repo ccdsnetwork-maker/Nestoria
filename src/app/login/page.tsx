@@ -3,13 +3,26 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+
 import BackButton from "@/components/layout/BackButton";
-import { Eye, EyeOff, Mail, Lock } from "lucide-react";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import ErrorModal from "@/components/ui/ErrorModal";
+
+import {
+  Eye,
+  EyeOff,
+  Mail,
+  Lock,
+} from "lucide-react";
+
+import {
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 import auth from "@/lib/auth";
+import { signInWithGoogle } from "@/services/googleAuth";
 
-export default function Login() {
+
+export default function Login(){
 
   const router = useRouter();
 
@@ -18,22 +31,41 @@ export default function Login() {
   const [email,setEmail] = useState("");
   const [password,setPassword] = useState("");
 
+  const [loading,setLoading] = useState(false);
+  const [googleLoading,setGoogleLoading] = useState(false);
+
+  const [errorMessage,setErrorMessage] = useState("");
+
+
 
   async function login(){
 
     if(!email.trim()){
-      alert("Please enter your email address.");
+
+      setErrorMessage(
+        "Please enter your email address."
+      );
+
       return;
+
     }
 
 
     if(!password.trim()){
-      alert("Please enter your password.");
+
+      setErrorMessage(
+        "Please enter your password."
+      );
+
       return;
+
     }
 
 
     try{
+
+      setLoading(true);
+
 
       await signInWithEmailAndPassword(
         auth,
@@ -47,11 +79,49 @@ export default function Login() {
 
     }catch(error:any){
 
-      alert(error.message);
+      setErrorMessage(
+        error.message
+      );
+
+
+    }finally{
+
+      setLoading(false);
 
     }
 
   }
+
+
+
+  async function googleLogin(){
+
+    try{
+
+      setGoogleLoading(true);
+
+
+      await signInWithGoogle();
+
+
+      router.push("/dashboard");
+
+
+    }catch(error:any){
+
+      setErrorMessage(
+        error.message
+      );
+
+
+    }finally{
+
+      setGoogleLoading(false);
+
+    }
+
+  }
+
 
 
   return (
@@ -70,9 +140,11 @@ export default function Login() {
 
 
           <p className="mt-5 text-base leading-7 text-blue-100">
+
             Sign in to continue managing your properties,
             property requests, interior design projects and
             all your Nestoria activities from one secure dashboard.
+
           </p>
 
 
@@ -87,7 +159,7 @@ export default function Login() {
 
               <li>✔ Manage listed properties</li>
               <li>✔ Track property requests</li>
-              <li>✔ Save favourite properties</li>
+              <li>✔ Save favourite listings</li>
               <li>✔ Receive instant notifications</li>
               <li>✔ Access interior design services</li>
 
@@ -98,8 +170,6 @@ export default function Login() {
 
 
         </section>
-
-
         <section>
 
           <BackButton />
@@ -116,6 +186,8 @@ export default function Login() {
             <p className="mt-2 text-sm text-gray-600">
               Enter your account details below.
             </p>
+
+
             <div className="mt-8 space-y-5">
 
 
@@ -148,7 +220,9 @@ export default function Login() {
 
                   />
 
+
                 </div>
+
 
               </div>
 
@@ -156,23 +230,37 @@ export default function Login() {
 
               <div>
 
+
                 <label className="mb-2 block text-sm font-semibold">
+
                   Password
+
                 </label>
+
 
 
                 <div className="relative">
 
 
                   <Lock
+
                     size={18}
+
                     className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+
                   />
+
 
 
                   <input
 
-                    type={showPassword ? "text" : "password"}
+                    type={
+                      showPassword
+                      ?
+                      "text"
+                      :
+                      "password"
+                    }
 
                     placeholder="Enter your password"
 
@@ -183,6 +271,7 @@ export default function Login() {
                     className="w-full rounded-lg border py-3 pl-10 pr-12 outline-none focus:border-[#0B2E6B]"
 
                   />
+
 
 
                   <button
@@ -203,13 +292,16 @@ export default function Login() {
                       <Eye size={18}/>
                     }
 
+
                   </button>
+
 
 
                 </div>
 
 
               </div>
+
 
 
 
@@ -247,13 +339,22 @@ export default function Login() {
 
                 onClick={login}
 
-                className="w-full rounded-lg bg-[#FFF700] py-3 font-bold text-[#0B2E6B] transition hover:opacity-90"
+                disabled={loading}
+
+                className="w-full rounded-lg bg-[#FFF700] py-3 font-bold text-[#0B2E6B] transition hover:opacity-90 disabled:opacity-60"
 
               >
 
-                Sign In
+                {
+                  loading
+                  ?
+                  "Signing In..."
+                  :
+                  "Sign In"
+                }
 
               </button>
+
 
 
 
@@ -261,14 +362,29 @@ export default function Login() {
 
                 type="button"
 
-                className="w-full rounded-lg bg-green-600 py-3 font-bold text-white transition hover:bg-green-700"
+                onClick={googleLogin}
+
+                disabled={googleLoading}
+
+                className="w-full rounded-lg bg-green-600 py-3 font-bold text-white transition hover:bg-green-700 disabled:opacity-60"
 
               >
 
-                Continue with Google
+                {
+                  googleLoading
+                  ?
+                  "Connecting Google..."
+                  :
+                  "Continue with Google"
+                }
+
 
               </button>
+
+
+
               <p className="text-center text-sm text-gray-600">
+
 
                 Don't have an account?{" "}
 
@@ -299,11 +415,25 @@ export default function Login() {
 
 
       </div>
+      {
+        errorMessage && (
+
+          <ErrorModal
+
+            message={errorMessage}
+
+            onClose={()=>setErrorMessage("")}
+
+          />
+
+        )
+      }
 
 
     </main>
 
 
   );
+
 
 }

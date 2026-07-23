@@ -10,6 +10,7 @@ import auth from "@/lib/auth";
 import { createUserProfile } from "@/services/userService";
 import { signInWithGoogle } from "@/services/googleAuth";
 import BackButton from "@/components/layout/BackButton";
+import ErrorModal from "@/components/ui/ErrorModal";
 
 
 export default function Register() {
@@ -31,37 +32,39 @@ export default function Register() {
 
   const [showSuccess,setShowSuccess]=useState(false);
 
+  const [errorMessage,setErrorMessage]=useState("");
+
 
 
   async function register(){
 
 
     if(!fullName.trim()){
-      alert("Please enter your full name.");
+      setErrorMessage("Please enter your full name.");
       return;
     }
 
 
     if(!phone.trim()){
-      alert("Please enter your phone number.");
+      setErrorMessage("Please enter your phone number.");
       return;
     }
 
 
     if(!email.trim()){
-      alert("Please enter your email address.");
+      setErrorMessage("Please enter your email address.");
       return;
     }
 
 
     if(password!==confirmPassword){
-      alert("Passwords do not match.");
+      setErrorMessage("Passwords do not match.");
       return;
     }
 
 
     if(!acceptTerms){
-      alert("Please accept the Terms & Conditions.");
+      setErrorMessage("Please accept the Terms & Conditions.");
       return;
     }
 
@@ -77,7 +80,6 @@ export default function Register() {
       );
 
 
-
       await createUserProfile(
         result.user.uid,
         {
@@ -88,17 +90,14 @@ export default function Register() {
       );
 
 
-
       setShowSuccess(true);
-
 
 
     }catch(error:any){
 
-      alert(error.message);
+      setErrorMessage(error.message);
 
     }
-
 
   }
 
@@ -116,7 +115,7 @@ export default function Register() {
 
     }catch(error:any){
 
-      alert(error.message);
+      setErrorMessage(error.message);
 
     }
 
@@ -129,10 +128,7 @@ export default function Register() {
 
     <main className="min-h-screen bg-gray-100 py-10 md:py-20">
 
-
       <div className="mx-auto grid max-w-6xl gap-8 px-4 md:grid-cols-2 md:px-6">
-
-
         <section className="flex flex-col justify-center rounded-2xl bg-[#0B2E6B] p-8 text-white">
 
 
@@ -165,11 +161,15 @@ export default function Register() {
 
             </ul>
 
+
           </div>
 
 
         </section>
+
+
         <section>
+
 
           <BackButton />
 
@@ -187,51 +187,73 @@ export default function Register() {
             </p>
 
 
-
             <div className="mt-8 space-y-5">
 
 
               <input
+
                 placeholder="Full Name"
+
                 value={fullName}
+
                 onChange={(e)=>setFullName(e.target.value)}
+
                 className="w-full rounded-lg border py-3 px-4 outline-none"
+
               />
 
 
               <input
+
                 placeholder="Phone Number"
+
                 value={phone}
+
                 onChange={(e)=>setPhone(e.target.value)}
+
                 className="w-full rounded-lg border py-3 px-4 outline-none"
+
               />
 
 
               <input
+
                 type="email"
+
                 placeholder="Email Address"
+
                 value={email}
+
                 onChange={(e)=>setEmail(e.target.value)}
+
                 className="w-full rounded-lg border py-3 px-4 outline-none"
+
               />
-
-
-
               <div className="relative">
 
                 <input
+
                   type={showPassword ? "text":"password"}
+
                   placeholder="Password"
+
                   value={password}
+
                   onChange={(e)=>setPassword(e.target.value)}
+
                   className="w-full rounded-lg border py-3 px-4 pr-12 outline-none"
+
                 />
 
 
                 <button
+
                   type="button"
+
                   onClick={()=>setShowPassword(!showPassword)}
+
                   className="absolute right-3 top-1/2 -translate-y-1/2"
+
                 >
 
                   {
@@ -249,24 +271,33 @@ export default function Register() {
 
 
 
-
               <div className="relative">
 
 
                 <input
+
                   type={showConfirmPassword ? "text":"password"}
+
                   placeholder="Confirm Password"
+
                   value={confirmPassword}
+
                   onChange={(e)=>setConfirmPassword(e.target.value)}
+
                   className="w-full rounded-lg border py-3 px-4 pr-12 outline-none"
+
                 />
 
 
 
                 <button
+
                   type="button"
+
                   onClick={()=>setShowConfirmPassword(!showConfirmPassword)}
+
                   className="absolute right-3 top-1/2 -translate-y-1/2"
+
                 >
 
                   {
@@ -284,20 +315,25 @@ export default function Register() {
 
 
 
-
               <label className="flex items-start gap-3 text-sm">
 
 
                 <input
+
                   type="checkbox"
+
                   checked={acceptTerms}
+
                   onChange={(e)=>setAcceptTerms(e.target.checked)}
+
                 />
 
 
                 <span>
+
                   I agree to the Terms & Conditions
                   and Privacy Policy.
+
                 </span>
 
 
@@ -305,27 +341,33 @@ export default function Register() {
 
 
 
-
-
               <button
+
                 onClick={register}
+
                 className="w-full rounded-lg bg-[#FFF700] py-3 font-bold text-[#0B2E6B]"
+
               >
+
                 Create Account
+
               </button>
-
-
 
 
 
               <button
-                type="button"
-                onClick={googleLogin}
-                className="w-full rounded-lg bg-green-600 py-3 font-bold text-white"
-              >
-                Continue with Google
-              </button>
 
+                type="button"
+
+                onClick={googleLogin}
+
+                className="w-full rounded-lg bg-green-600 py-3 font-bold text-white"
+
+              >
+
+                Continue with Google
+
+              </button>
 
 
 
@@ -335,14 +377,20 @@ export default function Register() {
 
 
                 <Link
+
                   href="/login"
+
                   className="font-bold text-[#0B2E6B]"
+
                 >
+
                   Login
+
                 </Link>
 
 
               </p>
+
 
 
             </div>
@@ -374,10 +422,15 @@ export default function Register() {
 
 
             <button
+
               onClick={()=>router.push("/login")}
+
               className="mt-6 w-full rounded-lg bg-[#FFF700] py-3 font-bold text-[#0B2E6B]"
+
             >
+
               OK
+
             </button>
 
 
@@ -387,6 +440,22 @@ export default function Register() {
         </div>
 
       )}
+
+
+
+      {
+        errorMessage && (
+
+          <ErrorModal
+
+            message={errorMessage}
+
+            onClose={()=>setErrorMessage("")}
+
+          />
+
+        )
+      }
 
 
 
