@@ -1,48 +1,58 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, doc, getDoc } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 
 import BackButton from "@/components/layout/BackButton";
 import { plans } from "@/config/membershipPlans";
 
-import { doc, getDoc } from "firebase/firestore";
-import { onAuthStateChanged } from "firebase/auth";
-
 import auth from "@/lib/auth";
 import { db } from "@/lib/firebase";
-
-import { updateUserMembership } from "@/services/membershipService";
 
 
 export default function MembershipPage() {
 
 
-const [billing,setBilling] = useState<"monthly"|"yearly">("monthly");
+const [billing,setBilling] =
+useState<"monthly"|"yearly">("monthly");
 
 
-const [currentPlan,setCurrentPlan] = useState<any>({
-  ...plans[0],
-  billingCycle:"monthly",
-});
-
-const [selectedPlan,setSelectedPlan] = useState<any>(null);
+const [currentPlan,setCurrentPlan] =
+useState<any>(plans[0]);
 
 
-const [showFeedback,setShowFeedback] = useState(false);
-const [pendingRequest,setPendingRequest] = useState<any>(null);
+const [activeBillingCycle,setActiveBillingCycle] =
+useState<"monthly"|"yearly">("monthly");
 
 
-const [loading,setLoading] = useState(true);
+const [selectedPlan,setSelectedPlan] =
+useState<any>(null);
+
+
+const [pendingRequest,setPendingRequest] =
+useState<any>(null);
+
+
+const [showFeedback,setShowFeedback] =
+useState(false);
+
+
+const [loading,setLoading] =
+useState(true);
+
+
+const [actionLoading,setActionLoading] =
+useState<string | null>(null);
 
 
 
 useEffect(()=>{
 
 
-const unsubscribe = onAuthStateChanged(
+const unsubscribe =
+onAuthStateChanged(
 auth,
 async(user)=>{
 
@@ -50,14 +60,14 @@ async(user)=>{
 if(!user){
 
 setLoading(false);
-
 return;
 
 }
 
 
 
-const userRef = doc(
+const userRef =
+doc(
 db,
 "users",
 user.uid
@@ -65,38 +75,55 @@ user.uid
 
 
 
-const snapshot = await getDoc(userRef);
+const snapshot =
+await getDoc(userRef);
 
 
 
+if(snapshot.exists()){
 
-if (snapshot.exists()) {
-  const data = snapshot.data();
 
-  const activeBilling =
-    data.billingCycle === "yearly"
-      ? "yearly"
-      : "monthly";
+const data =
+snapshot.data();
 
-  setBilling(activeBilling);
 
-  const activePlan =
-    plans.find(
-      (plan) => plan.name === data.membershipPlan
-    ) || plans[0];
 
-  setCurrentPlan({
-    ...activePlan,
-    billingCycle: activeBilling,
-  });
-} else {
-  setBilling("monthly");
+const savedBilling =
+data.billingCycle === "yearly"
+?
+"yearly"
+:
+"monthly";
 
-  setCurrentPlan({
-    ...plans[0],
-    billingCycle: "monthly",
-  });
+
+
+const savedPlan =
+plans.find(
+(plan)=>plan.name === data.membershipPlan
+)
+||
+plans[0];
+
+
+
+setCurrentPlan(savedPlan);
+
+setActiveBillingCycle(savedBilling);
+
+
+
 }
+else{
+
+
+setCurrentPlan(plans[0]);
+
+setActiveBillingCycle("monthly");
+
+
+}
+
+
 
 setLoading(false);
 
@@ -117,9 +144,15 @@ return unsubscribe;
 
 
 
-const handleUpgrade = async(plan:any)=>{
 
-const user = auth.currentUser;
+const handleUpgrade =
+async(plan:any)=>{
+
+
+const user =
+auth.currentUser;
+
+
 
 if(!user){
 
@@ -130,24 +163,45 @@ return;
 }
 
 
+
+const requestKey =
+`${plan.name}-${billing}`;
+
+
+setActionLoading(requestKey);
+
+
+
+try{
+
+
 await addDoc(
 collection(db,"membershipRequests"),
 {
 
+
 userId:user.uid,
+
 
 userName:
 user.displayName || "Nestoria User",
 
+
 email:
 user.email || "",
 
-plan:plan.name,
+
+plan:
+plan.name,
+
 
 billingCycle:
 billing==="monthly"
-? "Monthly"
-: "Yearly",
+?
+"Monthly"
+:
+"Yearly",
+
 
 propertyListingLimit:
 billing==="monthly"
@@ -156,12 +210,14 @@ plan.monthlyListings
 :
 plan.yearlyListings,
 
+
 propertyRequestLimit:
 billing==="monthly"
 ?
 plan.monthlyRequests
 :
 plan.yearlyRequests,
+
 
 interiorRequestLimit:
 billing==="monthly"
@@ -170,24 +226,61 @@ plan.monthlyInterior
 :
 plan.yearlyInterior,
 
+
 status:"Pending",
 
-createdAt:serverTimestamp(),
+
+createdAt:
+serverTimestamp(),
+
 
 }
 );
 
 
+
 setSelectedPlan(plan);
+
+
+
 setPendingRequest({
-  name: plan.name,
-  billingCycle: billing,
+
+name:plan.name,
+
+billingCycle:billing,
+
 });
+
+
 
 setShowFeedback(true);
 
 
+
+}
+catch(error){
+
+console.log(error);
+
+alert("Unable to submit request");
+
+}
+finally{
+
+
+setActionLoading(null);
+
+
+}
+
+
+
 };
+
+
+
+
+
 return (
 
 <main className="min-h-screen bg-gray-100 py-10 md:py-20">
@@ -202,19 +295,20 @@ return (
 
 
 <h1 className="text-4xl font-extrabold md:text-5xl">
+
 Nestoria Membership Plans
+
 </h1>
 
 
 <p className="mt-4 max-w-3xl text-blue-100">
-Choose a plan that matches your property goals and unlock
-more opportunities on Nestoria.
+
+Choose a plan that matches your property goals and unlock more opportunities on Nestoria.
+
 </p>
 
 
 </section>
-
-
 
 
 <section className="mt-8 flex justify-center">
@@ -224,31 +318,41 @@ more opportunities on Nestoria.
 
 
 <button
+
 onClick={()=>setBilling("monthly")}
-className={`rounded-full px-6 py-3 font-bold ${
+
+className={`rounded-full px-6 py-3 font-bold transition active:scale-95 ${
 billing==="monthly"
 ?
 "bg-[#0B2E6B] text-white"
 :
-"text-gray-600"
+"text-gray-600 hover:bg-gray-100"
 }`}
+
 >
+
 Monthly
+
 </button>
 
 
 
 <button
+
 onClick={()=>setBilling("yearly")}
-className={`rounded-full px-6 py-3 font-bold ${
+
+className={`rounded-full px-6 py-3 font-bold transition active:scale-95 ${
 billing==="yearly"
 ?
 "bg-[#0B2E6B] text-white"
 :
-"text-gray-600"
+"text-gray-600 hover:bg-gray-100"
 }`}
+
 >
+
 Yearly ⭐ Save More
+
 </button>
 
 
@@ -256,11 +360,6 @@ Yearly ⭐ Save More
 
 
 </section>
-
-
-
-
-
 <section className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
 
 
@@ -269,15 +368,18 @@ plans.map((plan)=>(
 
 
 <div
+
 key={plan.name}
-className={`relative rounded-2xl bg-white p-6 shadow-md ${
+
+className={`relative rounded-2xl bg-white p-6 shadow-md transition-all duration-200 ${
 currentPlan.name===plan.name &&
-currentPlan.billingCycle===billing
+activeBillingCycle===billing
 ?
-"border-4 border-[#FFF700]"
+"border-4 border-[#FFF700] scale-[1.02]"
 :
-""
+"hover:shadow-xl"
 }`}
+
 >
 
 
@@ -297,11 +399,13 @@ plan.popular && (
 
 
 
+
 <h2 className="text-2xl font-extrabold text-[#0B2E6B]">
 
 {plan.name}
 
 </h2>
+
 
 
 
@@ -317,6 +421,8 @@ plan.discount && billing==="yearly" && (
 )
 
 }
+
+
 
 
 
@@ -345,6 +451,7 @@ billing==="monthly"
 }
 
 </p>
+
 
 
 
@@ -390,10 +497,12 @@ plan.yearlyInterior
 
 
 {
-plan.features.slice(3).map((feature)=>(
+plan.features.slice(3).map((feature:string)=>(
 
 <li key={feature}>
+
 ✔ {feature}
+
 </li>
 
 ))
@@ -401,26 +510,44 @@ plan.features.slice(3).map((feature)=>(
 }
 
 
-
 </ul>
+
+
+
+
+
+
 <button
+
+
+disabled={
+actionLoading===`${plan.name}-${billing}`
+}
+
 
 onClick={()=>{
 
-if(currentPlan.name===plan.name &&
-currentPlan.billingCycle===billing){
+
+if(
+currentPlan.name===plan.name &&
+activeBillingCycle===billing
+){
 
 return;
 
 }
 
+
 handleUpgrade(plan);
+
 
 }}
 
-className={`mt-8 block w-full rounded-lg py-3 text-center font-bold ${
+
+
+className={`mt-8 w-full rounded-lg py-3 font-bold transition-all duration-200 active:scale-95 disabled:opacity-60 ${
 currentPlan.name===plan.name &&
-currentPlan.billingCycle===billing
+activeBillingCycle===billing
 
 ?
 
@@ -432,41 +559,62 @@ plan.name==="Basic"
 
 ?
 
-"bg-gray-300 text-gray-700"
+"bg-gray-300 text-gray-700 hover:bg-gray-400"
 
 :
 
-"bg-[#FFF700] text-[#0B2E6B]"
+"bg-[#FFF700] text-[#0B2E6B] hover:brightness-90"
 
 }`}
+
 
 >
 
 
+
 {
+
+actionLoading===`${plan.name}-${billing}`
+
+?
+
+"Submitting..."
+
+:
+
 currentPlan.name===plan.name &&
-currentPlan.billingCycle===billing
+activeBillingCycle===billing
 
 ?
 
 "Current Plan"
 
 :
+
 plan.name==="Basic"
+
 ?
+
 "Free Plan"
+
 :
-pendingRequest?.name === plan.name &&
-pendingRequest?.billingCycle === billing
+
+pendingRequest?.name===plan.name &&
+pendingRequest?.billingCycle===billing
+
 ?
+
 "Waiting for Approval"
+
 :
+
 `Upgrade to ${plan.name}`
 
 }
 
 
 </button>
+
 
 
 
@@ -479,13 +627,7 @@ pendingRequest?.billingCycle === billing
 }
 
 
-</section>
-
-
-
-
-
-<section className="mt-12 grid gap-6 md:grid-cols-2">
+</section><section className="mt-12 grid gap-6 md:grid-cols-2">
 
 
 <div className="rounded-2xl bg-white p-6 shadow-md">
@@ -520,9 +662,7 @@ Active membership
 
 <p className="mt-2 text-gray-600">
 
-Billing:
-{" "}
-{billing==="monthly" ? "Monthly" : "Yearly"}
+Billing: {activeBillingCycle==="monthly" ? "Monthly" : "Yearly"}
 
 </p>
 
@@ -552,61 +692,40 @@ Current Usage
 
 
 <p>
-
-🏠 Property Listings: 0 / {
-
-billing==="monthly"
-
+🏠 Property Listings: 0 / 
+{
+activeBillingCycle==="monthly"
 ?
-
 currentPlan.monthlyListings
-
 :
-
 currentPlan.yearlyListings
-
 }
-
 </p>
 
 
 
 <p>
-
-🔍 Property Requests: 0 / {
-
-billing==="monthly"
-
+🔍 Property Requests: 0 /
+{
+activeBillingCycle==="monthly"
 ?
-
 currentPlan.monthlyRequests
-
 :
-
 currentPlan.yearlyRequests
-
 }
-
 </p>
 
 
 
 <p>
-
-🛋 Interior Projects: 0 / {
-
-billing==="monthly"
-
+🛋 Interior Projects: 0 /
+{
+activeBillingCycle==="monthly"
 ?
-
 currentPlan.monthlyInterior
-
 :
-
 currentPlan.yearlyInterior
-
 }
-
 </p>
 
 
@@ -617,192 +736,12 @@ currentPlan.yearlyInterior
 
 
 </section>
-<section className="mt-12 rounded-2xl bg-white p-6 shadow-md md:p-8">
 
 
-<h2 className="text-3xl font-bold text-[#0B2E6B]">
-Plan Comparison
-</h2>
 
 
 
-<div className="mt-6 overflow-x-auto">
-
-
-<table className="min-w-full border text-sm">
-
-
-<thead className="bg-[#0B2E6B] text-white">
-
-
-<tr>
-
-<th className="border p-3 text-left">
-Feature
-</th>
-
-
-<th className="border p-3">
-Basic
-</th>
-
-
-<th className="border p-3">
-Silver
-</th>
-
-
-<th className="border p-3">
-Gold
-</th>
-
-
-<th className="border p-3">
-Platinum
-</th>
-
-
-</tr>
-
-
-</thead>
-
-
-
-
-<tbody>
-
-
-<tr>
-
-<td className="border p-3">
-Property Listings
-</td>
-
-
-<td className="border p-3 text-center">
-{
-billing==="monthly"
-?
-plans[0].monthlyListings
-:
-plans[0].yearlyListings
-}
-</td>
-
-
-<td className="border p-3 text-center">
-{
-billing==="monthly"
-?
-plans[1].monthlyListings
-:
-plans[1].yearlyListings
-}
-</td>
-
-
-<td className="border p-3 text-center">
-{
-billing==="monthly"
-?
-plans[2].monthlyListings
-:
-plans[2].yearlyListings
-}
-</td>
-
-
-<td className="border p-3 text-center">
-Unlimited
-</td>
-
-
-</tr>
-
-
-
-
-<tr>
-
-<td className="border p-3">
-Contact Visibility
-</td>
-
-
-<td className="border p-3 text-center">
-Limited
-</td>
-
-
-<td className="border p-3 text-center">
-Yes
-</td>
-
-
-<td className="border p-3 text-center">
-Yes
-</td>
-
-
-<td className="border p-3 text-center">
-Priority
-</td>
-
-
-</tr>
-
-
-
-
-
-<tr>
-
-<td className="border p-3">
-Featured Listings
-</td>
-
-
-<td className="border p-3 text-center">
-No
-</td>
-
-
-<td className="border p-3 text-center">
-Optional
-</td>
-
-
-<td className="border p-3 text-center">
-Included
-</td>
-
-
-<td className="border p-3 text-center">
-Premium
-</td>
-
-
-</tr>
-
-
-
-</tbody>
-
-
-</table>
-
-
-</div>
-
-
-</section>
-
-
-
-
-
-<section className="mt-12 rounded-2xl bg-white p-6 shadow-md md:p-8">
+<section className="mt-12 rounded-2xl bg-white p-6 shadow-md">
 
 
 <h2 className="text-3xl font-bold text-[#0B2E6B]">
@@ -833,6 +772,7 @@ Yes. New users automatically receive a Basic account.
 
 
 </div>
+
 
 
 
@@ -879,31 +819,7 @@ Payment integration will be connected later with a secure payment gateway.
 
 
 </section>
-<section className="mt-12 rounded-2xl bg-[#0B2E6B] p-8 text-center text-white">
 
-
-<h2 className="text-3xl font-extrabold">
-
-Upgrade Your Nestoria Experience
-
-</h2>
-
-
-
-<p className="mx-auto mt-4 max-w-2xl text-blue-100">
-
-Choose a membership plan that helps you reach more customers
-and manage more property opportunities.
-
-</p>
-
-
-
-
-
-
-
-</section>
 
 
 
@@ -919,20 +835,26 @@ showFeedback && selectedPlan && (
 
 
 <div className="text-5xl">
+
 ✅
+
 </div>
 
 
+
 <h2 className="mt-4 text-2xl font-extrabold text-[#0B2E6B]">
+
 Request Submitted
+
 </h2>
+
 
 
 <p className="mt-3 text-gray-600">
 
 Your upgrade request has been submitted. Please wait for admin approval before your membership is activated.
-</p>
 
+</p>
 
 
 
@@ -949,9 +871,7 @@ Plan: {selectedPlan.name}
 
 <p className="mt-2">
 
-Billing:
-{" "}
-{billing==="monthly" ? "Monthly" : "Yearly"}
+Billing: {pendingRequest?.billingCycle==="monthly" ? "Monthly" : "Yearly"}
 
 </p>
 
@@ -960,9 +880,9 @@ Billing:
 <p className="mt-2">
 
 Price:
-{" "}
+
 {
-billing==="monthly"
+pendingRequest?.billingCycle==="monthly"
 ?
 selectedPlan.monthly
 :
@@ -970,6 +890,7 @@ selectedPlan.yearly
 }
 
 </p>
+
 
 
 </div>
@@ -980,6 +901,7 @@ selectedPlan.yearly
 
 <button
 
+
 onClick={()=>{
 
 setShowFeedback(false);
@@ -988,7 +910,9 @@ setSelectedPlan(null);
 
 }}
 
-className="mt-6 w-full rounded-lg bg-[#0B2E6B] px-6 py-3 font-bold text-white"
+
+className="mt-6 w-full rounded-lg bg-[#0B2E6B] px-6 py-3 font-bold text-white transition active:scale-95 hover:brightness-90"
+
 
 >
 
@@ -1010,7 +934,6 @@ OK
 
 
 </div>
-
 
 </main>
 

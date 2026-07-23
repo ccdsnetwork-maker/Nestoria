@@ -129,6 +129,8 @@ return unsubscribe;
 
 
 },[]);
+
+
 useEffect(()=>{
 
 if(window.innerWidth < 768){
@@ -153,7 +155,6 @@ return (
 
 <div className="mx-auto max-w-6xl px-4 md:px-6">
 
-
 <BackButton />
 
 
@@ -170,18 +171,15 @@ Manage your properties, requests, interior projects and account.
 </section>
 
 
-
 <section
 ref={contentRef}
 className="mt-8 rounded-2xl bg-white p-6 shadow-md"
 >
 
-
 <div className="flex flex-col gap-6 md:flex-row md:items-center">
 
 
 <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full bg-gray-200 text-5xl">
-
 
 {
 profile.photoURL
@@ -195,41 +193,33 @@ className="h-full w-full object-cover"
 "👤"
 }
 
-
 </div>
 
 
-
 <div>
-
 
 <h2 className="text-2xl font-bold text-[#0B2E6B]">
 {profile.fullName}
 </h2>
 
-
 <p className="text-gray-600">
 {profile.email}
 </p>
-
 
 <p className="text-gray-600">
 {profile.phone}
 </p>
 
-
 <p className="text-gray-600">
 {profile.location}
 </p>
 
-
 </div>
-
 
 
 <Link
 href="/profile"
-className="md:ml-auto rounded-lg bg-[#FFF700] px-6 py-3 text-center font-bold text-[#0B2E6B]"
+className="md:ml-auto rounded-lg bg-[#FFF700] px-6 py-3 text-center font-bold text-[#0B2E6B] transition-all duration-200 hover:brightness-95 hover:shadow-md active:scale-95"
 >
 
 Edit Profile
@@ -239,17 +229,10 @@ Edit Profile
 
 </div>
 
-
 </section>
-
-
-
-
 <section className="mt-8 rounded-2xl bg-white p-6 shadow-md">
 
-
 <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-
 
 <div>
 
@@ -269,20 +252,23 @@ Your current Nestoria account plan
 
 </div>
 
+
 <p className="mt-2 text-sm text-gray-600">
 Status: {profile.membershipStatus}
 </p>
 
+
 <p className="mt-1 text-sm text-gray-600">
 Billing: {profile.billingCycle}
 </p>
+
 
 </div>
 
 
 <Link
 href="/membership"
-className="rounded-lg bg-[#FFF700] px-6 py-3 text-center font-bold text-[#0B2E6B]"
+className="rounded-lg bg-[#FFF700] px-6 py-3 text-center font-bold text-[#0B2E6B] transition-all duration-200 hover:brightness-95 hover:shadow-md active:scale-95"
 >
 
 Upgrade Account
@@ -292,8 +278,8 @@ Upgrade Account
 
 </div>
 
-
 </section>
+
 
 
 
@@ -301,29 +287,31 @@ Upgrade Account
 
 
 <h2 className="text-2xl font-bold text-[#0B2E6B]">
-
 Dashboard Menu
-
 </h2>
 
 
 <div className="mt-5 grid gap-4 md:grid-cols-3">
 
+
 {
 sections.map((section)=>(
+
 
 <button
 key={section.id}
 onClick={()=>setActive(section.id)}
-className={`rounded-xl p-5 text-left shadow-md ${
+
+className={`rounded-xl p-5 text-left shadow-md transition-all duration-200 hover:shadow-lg active:scale-95 ${
 active===section.id
 ?
-"bg-[#0B2E6B] text-white"
+"bg-[#0B2E6B] text-white scale-[1.02]"
 :
-"bg-gray-100"
+"bg-gray-100 hover:bg-gray-200"
 }`}
 
 >
+
 
 <div className="text-3xl">
 {section.icon}
@@ -337,6 +325,7 @@ active===section.id
 
 </button>
 
+
 ))
 
 }
@@ -346,6 +335,11 @@ active===section.id
 
 
 </section>
+
+
+
+
+
 <section
 ref={contentRef}
 className="mt-8 rounded-2xl bg-white p-6 shadow-md"
@@ -373,16 +367,13 @@ className="mt-5 rounded-lg border p-4"
 {item.name}
 </p>
 
-
 <p>
 📍 {item.location}
 </p>
 
-
 <p>
 Status: {item.status}
 </p>
-
 
 <p>
 Views: {item.views}
@@ -399,6 +390,8 @@ Views: {item.views}
 </div>
 
 )}
+
+
 
 
 
@@ -419,21 +412,17 @@ key={item.name}
 className="mt-5 rounded-lg border p-4"
 >
 
-
 <p className="font-bold">
 {item.name}
 </p>
-
 
 <p>
 📍 {item.location}
 </p>
 
-
 <p>
 Budget: {item.budget}
 </p>
-
 
 <p>
 Status: {item.status}
@@ -450,19 +439,13 @@ Status: {item.status}
 </div>
 
 )}
-
-
-
-
 {active==="interiors" && (
 
 <div>
 
-
 <h2 className="text-2xl font-bold text-[#0B2E6B]">
 🛋 Interior Projects
 </h2>
-
 
 
 {
@@ -499,7 +482,6 @@ Status: {item.status}
 </div>
 
 )}
-
 
 
 
@@ -549,6 +531,12 @@ className="mt-5 rounded-lg border p-4"
 </div>
 
 )}
+
+
+
+
+
+
 {active==="messages" && (
 
 <div>
@@ -586,7 +574,7 @@ className="mt-5 rounded-lg border p-4"
 
 <Link
 href={`/chat/${item.id}`}
-className="mt-4 inline-block rounded-lg bg-[#0B2E6B] px-5 py-2 font-bold text-white"
+className="mt-4 inline-block rounded-lg bg-[#0B2E6B] px-5 py-2 font-bold text-white transition-all duration-200 hover:brightness-125 hover:shadow-md active:scale-95"
 >
 
 Reply
@@ -609,6 +597,7 @@ Reply
 
 
 
+
 {active==="settings" && (
 
 <div>
@@ -625,7 +614,7 @@ Reply
 
 <Link
 href="/change-password"
-className="block rounded-lg border p-4"
+className="block rounded-lg border p-4 transition-all duration-200 hover:bg-gray-100 hover:shadow-md active:scale-95"
 >
 
 🔐 Change Password
@@ -634,8 +623,10 @@ className="block rounded-lg border p-4"
 
 
 
+
+
 <button
-className="w-full rounded-lg border p-4 text-left text-red-600"
+className="w-full rounded-lg border p-4 text-left text-red-600 transition-all duration-200 hover:bg-red-50 hover:shadow-md active:scale-95"
 >
 
 🗑 Delete Account
@@ -643,7 +634,9 @@ className="w-full rounded-lg border p-4 text-left text-red-600"
 </button>
 
 
+
 </div>
+
 
 
 
@@ -665,7 +658,7 @@ phone number and location from your profile page.
 
 <Link
 href="/profile"
-className="mt-4 inline-block rounded-lg bg-[#0B2E6B] px-5 py-2 font-bold text-white"
+className="mt-4 inline-block rounded-lg bg-[#0B2E6B] px-5 py-2 font-bold text-white transition-all duration-200 hover:brightness-125 hover:shadow-md active:scale-95"
 >
 
 Open Profile Settings
@@ -686,7 +679,6 @@ Open Profile Settings
 </section>
 
 
-
 </div>
 
 
@@ -694,6 +686,5 @@ Open Profile Settings
 
 
 );
-
 
 }
